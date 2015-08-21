@@ -3,8 +3,10 @@ from importlib import import_module
 import json
 
 import click
-from tourbillon.agent.agent import Tourbillon
-
+try:
+    from tourbillon.agent.agent import Tourbillon
+except:
+    from agent import Tourbillon
 
 @click.group()
 @click.version_option(version='0.1')
