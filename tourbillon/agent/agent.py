@@ -47,14 +47,12 @@ class Tourbillon(object):
                             format=self._config['log_format'])
         logger.info('Use config file: %s', config_file)
 
-
         self._load_plugins_config(os.path.abspath(
                                   os.path.dirname(config_file)))
 
         self._influxdb = InfluxDBClient(**self._config['database'])
         self._databases = [i['name']
-            for i in self._influxdb.get_list_database()]
-
+                           for i in self._influxdb.get_list_database()]
 
     def _load_plugins_config(self, tourbillon_conf_dir):
         t = Template(self._config['plugins_conf_dir'])
@@ -106,8 +104,8 @@ class Tourbillon(object):
                 if rp['name'] == tourbillon_rp_name:
                     logger.debug('current rp config: %s', rp)
                     if rp['duration'] == duration_in_hours and \
-                        rp['replicaN'] == int(replication) and \
-                        rp['default'] == default:
+                            rp['replicaN'] == int(replication) and \
+                            rp['default'] == default:
                         logger.debug('the retention policy %s already exists',
                                      tourbillon_rp_name)
                         return
@@ -143,9 +141,10 @@ class Tourbillon(object):
                               default=True):
 
         if name not in self._databases:
-            yield from self._loop.run_in_executor(None,
-                                                 self._influxdb.create_database,
-                                                 name)
+            yield from self._loop.run_in_executor(
+                None,
+                self._influxdb.create_database,
+                name)
             logger.info('database %s created successfully', name)
 
         if duration and replication:
@@ -160,8 +159,8 @@ class Tourbillon(object):
                 if rp['name'] == tourbillon_rp_name:
                     logger.debug('current rp: %s', rp)
                     if rp['duration'] == duration_in_hours and \
-                        rp['replicaN'] == int(replication) and \
-                        rp['default'] == default:
+                            rp['replicaN'] == int(replication) and \
+                            rp['default'] == default:
                         logger.debug('the retention policy %s already exists',
                                      tourbillon_rp_name)
                         return
@@ -209,13 +208,13 @@ class Tourbillon(object):
                     task_type = ''
                     if asyncio.iscoroutinefunction(candidate_task):
                         self._tasks.append(asyncio.async(
-                                          candidate_task(self)))
+                            candidate_task(self)))
                         task_type = 'coroutine'
                     else:
                         self._tasks.append(self._loop.run_in_executor(
-                                          None,
-                                          candidate_task,
-                                          self))
+                            None,
+                            candidate_task,
+                            self))
                         task_type = 'function'
                     logger.info('task found: %s.%s, type=%s',
                                 module_name, task_name, task_type)
