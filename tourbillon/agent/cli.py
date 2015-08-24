@@ -42,6 +42,22 @@ def show(ctx):
                    key, ', '.join(value)))
 
 
+@cli.command()
+@click.pass_context
+def clear(ctx):
+    """remove all plugins from configuration"""
+    config_file = ctx.parent.params['config']
+    with open(config_file, 'r') as f:
+        config = json.load(f)
+
+    if 'plugins' in config:
+        del config['plugins']
+        with open(config_file, 'w') as f:
+            json.dump(config, f, indent=2, sort_keys=True)
+
+    click.echo('All plugins removed')
+
+
 def validate_plugins(ctx, param, value):
     result = {}
     for v in value:
