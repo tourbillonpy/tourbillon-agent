@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 TOURBILLON_HOME = os.path.normpath(os.path.dirname(__file__))
 
+
 class Tourbillon(object):
 
     """docstring for ClassName"""
@@ -39,7 +40,10 @@ class Tourbillon(object):
         for file_name in config_files:
             k = os.path.splitext(os.path.basename(file_name))[0]
             with open(file_name, 'r') as f:
-                self.pluginconfig[k] = json.load(f)
+                try:
+                    self.pluginconfig[k] = json.load(f)
+                except:
+                    logger.exception('error loading config file %s', file_name)
         logger.info(self.pluginconfig)
         self._aio_run_event = asyncio.Event()
         self._thr_run_event = threading.Event()
@@ -51,6 +55,9 @@ class Tourbillon(object):
 
     @property
     def run_event(self):
+
+        """get the asyncio.Event or threading.Event"""
+
         cf = inspect.currentframe()
         caller_name = cf.f_back.f_code.co_name
         caller = cf.f_back.f_globals[caller_name]
