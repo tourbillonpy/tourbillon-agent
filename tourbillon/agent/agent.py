@@ -15,8 +15,6 @@ from influxdb import InfluxDBClient
 logger = logging.getLogger(__name__)
 
 
-TOURBILLON_HOME = os.path.normpath(os.path.dirname(__file__))
-
 
 class Tourbillon(object):
 
@@ -31,9 +29,9 @@ class Tourbillon(object):
         logger.info('Use config file: %s', config_file)
         self.tasks = []
         self.pluginconfig = {}
-
+        tourbillon_conf_dir = os.path.abspath(os.path.dirname(config_file))
         t = Template(self.config['plugins_conf_dir'])
-        plugin_conf_dir = t.safe_substitute(tourbillon_home=TOURBILLON_HOME)
+        plugin_conf_dir = t.safe_substitute(tourbillon_conf_dir=tourbillon_conf_dir)
         logger.info('Plugin config dir: %s', plugin_conf_dir)
         config_files = glob.glob(os.path.join(plugin_conf_dir,
                                               '*.conf'))
