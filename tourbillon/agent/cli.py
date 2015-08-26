@@ -6,9 +6,6 @@ import os
 import click
 
 
-
-
-
 @click.group()
 @click.version_option(version='0.1')
 @click.option('--config',
@@ -159,8 +156,8 @@ def run(ctx):
     ag = Tourbillon(config_file)
     ag.run()
 
-def main():
 
+def main():
     cli(prog_name='tourbillon', standalone_mode=False)
 
 if __name__ == '__main__':
