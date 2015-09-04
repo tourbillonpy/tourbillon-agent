@@ -1,9 +1,16 @@
 #!/usr/bin/env python
-from importlib import import_module
 import json
-import sys
 import os
+import sys
+
 import click
+
+from importlib import import_module
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(
+                               os.path.abspath(__file__)))))
+
+from tourbillon.agent import Tourbillon
 
 
 @click.group()
@@ -161,10 +168,4 @@ def main():
     cli(prog_name='tourbillon', standalone_mode=False)
 
 if __name__ == '__main__':
-    if __package__ is None:
-        path = os.path.dirname(os.path.dirname(os.path.dirname(
-                               os.path.abspath(__file__))))
-
-        sys.path.append(path)
-    from tourbillon.agent import Tourbillon
     main()
