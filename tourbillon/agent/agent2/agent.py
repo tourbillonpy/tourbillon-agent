@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from datetime import timedelta
 import functools
 import glob
@@ -54,6 +55,7 @@ class Tourbillon(object):
         self._influxdb = InfluxDBClient(**self._config['database'])
         self._databases = [i['name']
                            for i in self._influxdb.get_list_database()]
+        print(self._databases)
 
     def _load_plugins_config(self, tourbillon_conf_dir):
         t = Template(self._config['plugins_conf_dir'])
