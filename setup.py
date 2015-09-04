@@ -7,7 +7,7 @@ PY34_PLUS = sys.version_info[0] == 3 and sys.version_info[1] >= 4
 exclude = ['tourbillon.agent.agent2'
            if PY34_PLUS else 'tourbillon.agent.agent']
 
-install_requires = ['influxdb==2.8.0', 'click==5.1']
+install_requires = ['influxdb>=2.8.0', 'click==5.1']
 
 if not PY34_PLUS:
     install_requires.append('trollius==2.0')
