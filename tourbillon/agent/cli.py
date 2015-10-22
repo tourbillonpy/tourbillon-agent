@@ -6,12 +6,16 @@ import os
 import click
 
 
+LOG_FORMAT_EX = '%(asctime)s %(levelname)s [%(name)s %(filename)s:'\
+    '%(funcName)s:%(lineno)d] %(message)s'
+LOG_FORMAT_NO = '%(asctime)s %(levelname)s %(message)s'
+
 
 @click.group()
 @click.version_option(version='0.1')
 @click.option('--config',
               '-c',
-              type=click.Path(exists=True,
+              type=click.Path(exists=False,
                               file_okay=True,
                               dir_okay=False,
                               writable=True,
@@ -22,6 +26,58 @@ import click
 def cli(config):
     """tourbillon: send metrics to an influxdb"""
     pass
+
+
+@cli.command()
+@click.pass_context
+def init(ctx):
+    config_file = ctx.parent.params['config']
+    click.echo(click.style('\nConfigure Tourbillon agent\n',
+                           fg='blue', bold=True, underline=True))
+    click.echo(click.style('InfluxDB configuration\n',
+                           fg='magenta', underline=True))
+    host = click.prompt('Enter the InfluxDB hostname', default='localhost')
+    port = click.prompt('Enter the InfluxDB port', default=8086, type=int)
+    username = click.prompt('Enter the InfluxDB username [Enter for no auth]',
+                            default='',
+                            show_default=False)
+    password = None
+    if username:
+        password = click.prompt('Enter the InfluxDB password',
+                                hide_input=True,
+                                confirmation_prompt=True)
+
+    click.echo(click.style('\nLogging configuration\n',
+                           fg='magenta', underline=True))
+    log_level = click.prompt('Enter the log level', type=click.Choice([
+                             'CRITICAL',
+                             'ERROR',
+                             'WARNING',
+                             'INFO',
+                             'DEBUG'
+                             ]), default='INFO')
+    log_format = click.prompt('Enter the log format', type=click.Choice([
+        'default',
+        'extended']), default='default')
+
+    fmt = LOG_FORMAT_NO if log_format == 'default' else LOG_FORMAT_EX
+    config = {
+        'database': {
+            'host': host,
+            'port': port
+        },
+        'log_format': fmt,
+        'log_level': log_level,
+        'plugins_conf_dir': '${tourbillon_conf_dir}/conf.d'
+    }
+    if username:
+        config['database']['username'] = username
+        config['database']['password'] = password
+
+    with open(config_file, 'w') as f:
+        json.dump(config, f, indent=4)
+
+    click.echo(click.style('\nconfiguration file generated\n', fg='green'))
 
 
 @cli.command()
@@ -157,8 +213,8 @@ def run(ctx):
     ag = Tourbillon(config_file)
     ag.run()
 
-def main():
 
+def main():
     cli(prog_name='tourbillon', standalone_mode=False)
 
 if __name__ == '__main__':
