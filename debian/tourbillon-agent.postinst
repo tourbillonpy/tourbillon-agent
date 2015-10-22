@@ -23,10 +23,14 @@ case "$1" in
         # create a tourbillon group and user
         if ! grep -q tourbillon /etc/passwd; then
                 addgroup --system tourbillon
-                adduser --system --group tourbillon tourbillon
+                adduser --system --group tourbillon
         fi
 
         chown -R tourbillon:tourbillon /etc/tourbillon
+        chown -R tourbillon:tourbillon /usr/share/python/tourbillon-agent
+        sudo -u tourbillon /usr/share/python/tourbillon-agent/bin/tourbillon init
+        supervisorctl reread
+        supervisorctl add tourbillon
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

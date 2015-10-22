@@ -3,6 +3,8 @@ from importlib import import_module
 import json
 import sys
 import os
+import pip
+
 import click
 
 
@@ -18,7 +20,7 @@ LOG_FORMAT_NO = '%(asctime)s %(levelname)s %(message)s'
               type=click.Path(exists=False,
                               file_okay=True,
                               dir_okay=False,
-                              writable=True,
+                              writable=False,
                               resolve_path=True),
               default='/etc/tourbillon/tourbillon.conf',
               help='specify a different config file',
@@ -31,6 +33,7 @@ def cli(config):
 @cli.command()
 @click.pass_context
 def init(ctx):
+    """initialize the tourbillon configuration"""
     config_file = ctx.parent.params['config']
     click.echo(click.style('\nConfigure Tourbillon agent\n',
                            fg='blue', bold=True, underline=True))
@@ -78,6 +81,41 @@ def init(ctx):
         json.dump(config, f, indent=4)
 
     click.echo(click.style('\nconfiguration file generated\n', fg='green'))
+
+
+@cli.command()
+@click.pass_context
+@click.argument('search_term', nargs=1, required=True)
+def search(ctx, search_term):
+    pip_args = ['search', search_term]
+    pip.main(pip_args)
+
+
+@cli.command()
+@click.pass_context
+@click.argument('plugin', nargs=1, required=True)
+def install(ctx, plugin):
+    pip_args = ['install']
+    pip_args.append(plugin)
+    pip.main(pip_args)
+
+
+@cli.command()
+@click.pass_context
+@click.argument('plugin', nargs=1, required=True)
+def upgrade(ctx, plugin):
+    pip_args = ['install', '-U']
+    pip_args.append(plugin)
+    pip.main(pip_args)
+
+
+@cli.command()
+@click.pass_context
+@click.argument('plugin', nargs=1, required=True)
+def reinstall(ctx, plugin):
+    pip_args = ['install', '--force-reinstall', '-U']
+    pip_args.append(plugin)
+    pip.main(pip_args)
 
 
 @cli.command()

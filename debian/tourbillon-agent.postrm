@@ -1,0 +1,31 @@
+#!/bin/sh
+# postrm script for tourbillon-agent
+#
+# see: dh_installdeb(1)
+
+set -e
+
+
+case "$1" in
+    remove)
+        ;;
+
+    upgrade)
+        ;;
+
+    purge)
+        rm -rf /etc/supervisor/conf.d/tourbillon.conf
+        rm -rf /etc/tourbillon
+        rm -rf /home/tourbillon
+        userdel tourbillon >/dev/null 2>&1 || true
+        groupdel tourbillon >/dev/null 2>&1 || true
+        ;;
+
+    failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
