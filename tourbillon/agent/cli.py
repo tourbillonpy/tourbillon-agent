@@ -85,10 +85,32 @@ def init(ctx):
 
 @cli.command()
 @click.pass_context
-@click.argument('search_term', nargs=1, required=True)
-def search(ctx, search_term):
-    pip_args = ['search', search_term]
-    pip.main(pip_args)
+def list(ctx):
+    idx_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            'plugin_index.json')
+
+    with open(idx_file, 'r') as f:
+        index = json.load(f)
+
+    top = '+{:<20}+{:<5}+{:<60}+{:<35}+-+'.format('-' * 20,
+                                                  '-' * 5,
+                                                  '-' * 60,
+                                                  '-' * 35)
+    header = '|{:<20}|{:<5}|{:<60}|{:<35}|F|'.format('name',
+                                                     'ver.',
+                                                     'description',
+                                                     'author')
+    line = '|{:<20}|{:<5}|{:<60}|{:<35}|{}|'
+
+    print(top)
+    print(header)
+    print(top)
+
+    for item in index:
+        print(line.format(item['name'], item['version'], item['description'],
+                          item['author'], '*' if item['featured'] else ''))
+
+    print(top)
 
 
 @cli.command()
