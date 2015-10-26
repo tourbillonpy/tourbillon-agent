@@ -13,4 +13,4 @@
 		"featured": true,
 		"pip_cmd": "git+http://github.com/tourbillon-python/tourbillon-uwsgi.git"
 	}
-]
+}
