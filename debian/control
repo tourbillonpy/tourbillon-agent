@@ -1,13 +1,13 @@
 Source: tourbillon-agent
 Section: python
 Priority: extra
-Maintainer: The Tourbillon Team <tourbillon@gmail.com>
+Maintainer: The Tourbillon Team <tourbillonpy@gmail.com>
 Build-Depends: debhelper (>= 9), python, dh-virtualenv (>= 0.8)
 Standards-Version: 3.9.5
 
-Package: tourbillon-agent
-Architecture: any
-Pre-Depends: dpkg (>= 1.16.1), python2.7 ${misc:Pre-Depends}, supervisor (>=3.0)
+Package: tourbillon
+Architecture: all
+Pre-Depends: dpkg (>= 1.16.1), python2.7 ${misc:Pre-Depends}
 Depends: ${python:Depends}, ${misc:Depends}
 Description: Tourbillon is an agent that collect metrics from serveral system/services
  and write it into an InfluxDB

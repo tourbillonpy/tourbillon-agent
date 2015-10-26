@@ -25,12 +25,9 @@ case "$1" in
                 addgroup --system tourbillon
                 adduser --system --group tourbillon
         fi
-
-        chown -R tourbillon:tourbillon /etc/tourbillon
-        chown -R tourbillon:tourbillon /usr/share/python/tourbillon-agent
-        sudo -u tourbillon /usr/share/python/tourbillon-agent/bin/tourbillon init
-        supervisorctl reread
-        supervisorctl add tourbillon
+        mkdir /var/log/tourbillon
+        chown tourbillon /var/log/tourbillon
+        /usr/share/python/tourbillon/bin/tourbillon init
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

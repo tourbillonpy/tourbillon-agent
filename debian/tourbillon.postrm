@@ -14,9 +14,10 @@ case "$1" in
         ;;
 
     purge)
-        rm -rf /etc/supervisor/conf.d/tourbillon.conf
         rm -rf /etc/tourbillon
         rm -rf /home/tourbillon
+        rm -rf /var/log/tourbillon
+        rm -rf /usr/share/python/tourbillon
         userdel tourbillon >/dev/null 2>&1 || true
         groupdel tourbillon >/dev/null 2>&1 || true
         ;;

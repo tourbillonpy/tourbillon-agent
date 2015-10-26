@@ -248,6 +248,7 @@ Disable the functions get_cpu_usage and get_mem_usage of the
 def run(ctx):
     """run the agent"""
     config_file = ctx.parent.params['config']
+    from tourbillon.agent import Tourbillon
     ag = Tourbillon(config_file)
     ag.run()
 
@@ -261,5 +262,4 @@ if __name__ == '__main__':
                                os.path.abspath(__file__))))
 
         sys.path.append(path)
-    from tourbillon.agent import Tourbillon
     main()

@@ -1,1 +1,1 @@
-export PATH=$PATH:/usr/share/python/tourbillon-agent/bin
+export PATH=$PATH:/usr/share/python/tourbillon/bin

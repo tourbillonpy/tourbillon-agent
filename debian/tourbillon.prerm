@@ -1,0 +1,21 @@
+#!/bin/sh
+# prerm script for tourbillon-agent
+#
+# see: dh_installdeb(1)
+
+set -e
+
+
+case "$1" in
+  remove|upgrade|deconfigure)
+    /etc/init.d/tourbillon stop 2>/dev/null >/dev/null || true
+  ;;
+
+  failed-upgrade)
+  ;;
+
+  *)
+    echo "prerm called with unknown argument \`$1'" >&2
+    exit 1
+  ;;
+esac
