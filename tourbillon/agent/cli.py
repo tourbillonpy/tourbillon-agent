@@ -109,9 +109,9 @@ def list(ctx):
     print(header)
     print(top)
 
-    for item in index:
-        print(line.format(item['name'], item['version'], item['description'],
-                          item['author'], '*' if item['featured'] else ''))
+    for name, meta in index.items():
+        print(line.format(name, meta['version'], meta['description'],
+                          meta['author'], '*' if meta['featured'] else ''))
 
     print(top)
 
@@ -120,7 +120,15 @@ def list(ctx):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def install(ctx, plugin):
+    index = json.load(urlopen(INDEX_FILE_URL))
+    if plugin not in index:
+        click.echo(click.style(
+                   'plugin {} not found!'.format(plugin), fg='red'))
+        return
     pip_args = ['install']
+    meta = index[plugin]
+    if 'pip_cmd' in meta:
+        plugin = meta['pip_cmd']
     pip_args.append(plugin)
     pip.main(pip_args)
 
@@ -129,6 +137,15 @@ def install(ctx, plugin):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def upgrade(ctx, plugin):
+    index = json.load(urlopen(INDEX_FILE_URL))
+    if plugin not in index:
+        click.echo(click.style(
+                   'plugin {} not found!'.format(plugin), fg='red'))
+        return
+    pip_args = ['install']
+    meta = index[plugin]
+    if 'pip_cmd' in meta:
+        plugin = meta['pip_cmd']
     pip_args = ['install', '-U']
     pip_args.append(plugin)
     pip.main(pip_args)
@@ -138,6 +155,15 @@ def upgrade(ctx, plugin):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def reinstall(ctx, plugin):
+    index = json.load(urlopen(INDEX_FILE_URL))
+    if plugin not in index:
+        click.echo(click.style(
+                   'plugin {} not found!'.format(plugin), fg='red'))
+        return
+    pip_args = ['install']
+    meta = index[plugin]
+    if 'pip_cmd' in meta:
+        plugin = meta['pip_cmd']
     pip_args = ['install', '--force-reinstall', '-U']
     pip_args.append(plugin)
     pip.main(pip_args)
