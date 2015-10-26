@@ -1,18 +1,16 @@
-[
-	{
-		"name": "tourbillon-linux",
+{ 
+	"tourbillon-linux": {
 		"version": "0.2",
 		"description": "tourbillon linux plugin",
 		"author": "The Tourbillon Team",
 		"featured": true,
 		"pip_cmd": "git+http://github.com/tourbillon-python/tourbillon-linux.git"
 	},
-	{
-		"name": "tourbillon-uwsgi",
+	"tourbillon-uwsgi":	{
 		"version": "0.2",
 		"description": "tourbillon uwsgi plugin",
 		"author": "The Tourbillon Team",
 		"featured": true,
-		"pip_cmd": "git+http://github.com/tourbillon-python/tourbillon-linux.git"
+		"pip_cmd": "git+http://github.com/tourbillon-python/tourbillon-uwsgi.git"
 	}
 ]
