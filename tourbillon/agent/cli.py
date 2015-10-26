@@ -4,6 +4,10 @@ import json
 import sys
 import os
 import pip
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib import urlopen
 
 import click
 
@@ -11,6 +15,9 @@ import click
 LOG_FORMAT_EX = '%(asctime)s %(levelname)s [%(name)s %(filename)s:'\
     '%(funcName)s:%(lineno)d] %(message)s'
 LOG_FORMAT_NO = '%(asctime)s %(levelname)s %(message)s'
+
+INDEX_FILE_URL = 'https://raw.githubusercontent.com/tourbillon-python/'\
+    'tourbillon-agent/master/meta/plugin_index.json'
 
 
 @click.group()
@@ -86,11 +93,7 @@ def init(ctx):
 @cli.command()
 @click.pass_context
 def list(ctx):
-    idx_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                            'plugin_index.json')
-
-    with open(idx_file, 'r') as f:
-        index = json.load(f)
+    index = json.load(urlopen(INDEX_FILE_URL))
 
     top = '+{:<20}+{:<5}+{:<60}+{:<35}+-+'.format('-' * 20,
                                                   '-' * 5,
