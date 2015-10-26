@@ -15,7 +15,7 @@ if not PY34_PLUS:
 
 setup(
     name='tourbillon',
-    version='0.2',
+    version='0.3',
     description='Agent to collect metrics and store them into an InfluxDB',
     packages=find_packages(exclude=exclude),
     install_requires=install_requires,
