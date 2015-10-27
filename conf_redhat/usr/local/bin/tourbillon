@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/share/python/tourbillon/bin/tourbillon run &

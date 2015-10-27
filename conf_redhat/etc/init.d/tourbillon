@@ -1,0 +1,69 @@
+#!/bin/bash
+
+
+PATH=/usr/local/bin:/usr/bin:/sbin:/bin:/usr/sbin
+export PATH
+
+
+lockfile="/var/lock/subsys/tourbillon"
+pidfile="/var/run/tourbillon/tourbillon.pid"
+tourbillond="/usr/local/bin/tourbillon"
+RETVAL=0
+
+. /etc/init.d/functions
+
+
+
+start() {
+    echo -n $"Starting tourbillon agent: "
+    daemon --user tourbillon --pidfile $pidfile $tourbillond
+    RETVAL=$?
+    echo
+        [ $RETVAL = 0 ] && touch ${lockfile}
+        return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping tourbillon agent: "
+    killproc -p $pidfile $tourbillond
+    RETVAL=$?
+    echo
+    [ $RETVAL = 0 ] && rm -f ${lockfile} ${pidfile}
+}
+
+restart() {
+    stop
+    start
+}
+
+rh_status() {
+    status -p $pidfile $tourbillond
+    RETVAL=$?
+    return $RETVAL
+}
+
+rh_status_q() {
+    rh_status >/dev/null 2>&1
+}
+
+
+case "$1" in
+    start)
+        start
+    ;;
+    stop)
+        stop
+    ;;
+    restart)
+        restart
+    ;;
+    status)
+        rh_status
+    ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart}"
+        exit 1
+esac
+
+exit $RETVAL
+

@@ -1,0 +1,64 @@
+{
+    "extensions": {
+        "enabled": [
+            "python_venv",
+            "blocks",
+            "file_extras",
+            "file_permissions"
+        ]
+    },
+    "core": {
+        "group": "Application/System",
+        "license": "ASF",
+        "name": "tourbillon",
+        "summary": "A Python agent for collecting metrics and store them into an InfluxDB.",
+        "version": "0.3",
+        "url": "https://github.com/tourbillon-python",
+        "source": "/tourbillon/tourbillon-agent"
+    },
+    "python_venv": {
+        "name": "tourbillon",
+        "path": "/usr/share/python",
+        "requirements": ["requirements.txt"]
+    },
+    "blocks": {
+        "desc": [
+            "some long package description",
+            "each array element is a new line"
+        ],
+        "post": [
+            "if ! grep -q tourbillon /etc/passwd; then",
+            "    groupadd -r tourbillon",
+            "    adduser -r -g tourbillon tourbillon",
+            "fi",
+            "mkdir /var/log/tourbillon",
+            "mkdir -p /etc/tourbillon/conf.d",
+            "chown tourbillon /var/log/tourbillon",
+            "chkconfig --add tourbillon",
+            "echo \"Run '/usr/share/python/tourbillon/bin/tourbillon init' to create the tourbillon config file\"",
+            "echo \"Install some plugins and start the service with\"",
+            "echo \"\tsudo /etc/init.d/tourbillon start\""
+        ],
+        "postun": [
+            "rm -rf /etc/tourbillon",
+            "rm -rf /var/log/tourbillon",
+            "userdel tourbillon"
+        ],
+        "preun": [
+            "/etc/init.d/tourbillon stop 2>/dev/null >/dev/null || true",
+            "chkconfig --del tourbillon"
+        ]
+    },
+    "file_extras": {
+        "files": [
+            "conf/etc/init.d/tourbillon:etc/init.d/tourbillon",
+            "conf/etc/profile.d/tourbillon.sh:etc/profile.d/tourbillon.sh"
+        ]
+    },
+    "file_permissions": {
+        "user": "root",
+        "group": "root",
+        "create_user": false,
+        "create_group": false
+    }
+}

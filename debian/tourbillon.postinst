@@ -29,8 +29,8 @@ case "$1" in
         chown tourbillon /var/log/tourbillon
         /usr/share/python/tourbillon/bin/tourbillon init
         update-rc.d tourbillon defaults
-        echo -n "Install some plugins and start the service with"
-        echo -n "\tsudo service tourbillon start"
+        echo "Install some plugins and start the service with"
+        echo "\tsudo service tourbillon start"
 
     ;;
 

@@ -1,4 +1,10 @@
 #!/bin/sh
+#
+# tourbillon service daemon init script.
+#
+# Copyright (C) 2015 The Tourbillon Team
+#
+
 
 ### BEGIN INIT INFO
 # Provides:	  tourbillon
@@ -21,19 +27,12 @@ STOP_SCHEDULE="${STOP_SCHEDULE:-QUIT/5/TERM/5/KILL/5}"
 test -x $DAEMON || exit 0
 
 
-. /lib/lsb/init-functions
-
-
 
 #
 # Function that starts the daemon/service
 #
 do_start()
 {
-	# Return
-	#   0 if daemon has been started
-	#   1 if daemon was already running
-	#   2 if daemon could not be started
 	start-stop-daemon --start --quiet --pidfile $PID --make-pidfile --chuid tourbillon --exec $DAEMON --test > /dev/null \
 		|| return 1
 	start-stop-daemon --start --background --quiet --pidfile $PID --make-pidfile --chuid tourbillon --exec $DAEMON -- \
@@ -47,32 +46,12 @@ do_start()
 #
 do_stop()
 {
-	# Return
-	#   0 if daemon has been stopped
-	#   1 if daemon was already stopped
-	#   2 if daemon could not be stopped
 	#   other if a failure occurred
 	start-stop-daemon --stop --quiet --retry=$STOP_SCHEDULE --pidfile $PID --name $NAME
 	RETVAL="$?"
 
 	sleep 1
 	return "$RETVAL"
-}
-
-#
-# Function that sends a SIGHUP to the daemon/service
-#
-do_reload() {
-	start-stop-daemon --stop --signal HUP --quiet --pidfile $PID --name $NAME
-	return 0
-}
-
-#
-# Rotate log files
-#
-do_rotate() {
-	start-stop-daemon --stop --signal USR1 --quiet --pidfile $PID --name $NAME
-	return 0
 }
 
 
@@ -113,18 +92,6 @@ case "$1" in
 				;;
 		esac
 		;;
-	reload|force-reload)
-		log_daemon_msg "Reloading $DESC configuration" "$NAME"
-
-
-		do_reload
-		log_end_msg $?
-		;;
-	configtest|testconfig)
-		log_daemon_msg "Testing $DESC configuration"
-		test_nginx_config
-		log_end_msg $?
-		;;
 	status)
 		status_of_proc -p $PID "$DAEMON" "$NAME" && exit 0 || exit $?
 		;;
@@ -134,7 +101,7 @@ case "$1" in
 		log_end_msg $?
 		;;
 	*)
-		echo "Usage: $NAME {start|stop|restart|reload|force-reload|status|rotate}" >&2
+		echo "Usage: $NAME {start|stop|restart}" >&2
 		exit 3
 		;;
 esac

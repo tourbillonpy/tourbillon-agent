@@ -32,7 +32,17 @@ INDEX_FILE_URL = 'https://raw.githubusercontent.com/tourbillon-python/'\
               default='/etc/tourbillon/tourbillon.conf',
               help='specify a different config file',
               metavar='<config_file>')
-def cli(config):
+@click.option('--pidfile',
+              '-p',
+              type=click.Path(exists=False,
+                              file_okay=True,
+                              dir_okay=False,
+                              writable=False,
+                              resolve_path=True),
+              default='/var/run/tourbillon/tourbillon.pid',
+              help='specify a different pidfile file',
+              metavar='<pidfile_file>')
+def cli(config, pidfile):
     """tourbillon: send metrics to an influxdb"""
     pass
 
@@ -298,6 +308,9 @@ Disable the functions get_cpu_usage and get_mem_usage of the
 @click.pass_context
 def run(ctx):
     """run the agent"""
+    pid_file = ctx.parent.params['pidfile']
+    with open(pid_file, 'w') as f:
+        f.write(os.getpid())
     config_file = ctx.parent.params['config']
     from tourbillon.agent import Tourbillon
     ag = Tourbillon(config_file)
