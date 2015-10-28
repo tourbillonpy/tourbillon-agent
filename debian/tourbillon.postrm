@@ -17,7 +17,10 @@ case "$1" in
         rm -rf /etc/tourbillon
         rm -rf /home/tourbillon
         rm -rf /var/log/tourbillon
+        rm -rf /var/run/tourbillon
         rm -rf /usr/share/python/tourbillon
+        rm -f /etc/profile.d/tourbillon.sh
+        rm -f /etc/logrotate.d/tourbillon
         userdel tourbillon >/dev/null 2>&1 || true
         groupdel tourbillon >/dev/null 2>&1 || true
         ;;

@@ -13,8 +13,7 @@
         "name": "tourbillon",
         "summary": "A Python agent for collecting metrics and store them into an InfluxDB.",
         "version": "0.3",
-        "url": "https://github.com/tourbillon-python",
-        "source": "/tourbillon/tourbillon-agent"
+        "url": "https://github.com/tourbillon-python"
     },
     "python_venv": {
         "name": "tourbillon",
@@ -23,8 +22,7 @@
     },
     "blocks": {
         "desc": [
-            "some long package description",
-            "each array element is a new line"
+            "A Python agent for collecting metrics and store them into an InfluxDB."
         ],
         "post": [
             "if ! grep -q tourbillon /etc/passwd; then",
@@ -32,8 +30,13 @@
             "    adduser -r -g tourbillon tourbillon",
             "fi",
             "mkdir /var/log/tourbillon",
+            "mkdir /var/run/tourbillon",
             "mkdir -p /etc/tourbillon/conf.d",
             "chown tourbillon /var/log/tourbillon",
+            "chown tourbillon /var/run/tourbillon",
+            "chmod 644 /etc/logrotate.d/tourbillon",
+            "chmod 755 /usr/local/bin/tourbillon",
+            "chmod 755 /etc/init.d/tourbillon",
             "chkconfig --add tourbillon",
             "echo \"Run '/usr/share/python/tourbillon/bin/tourbillon init' to create the tourbillon config file\"",
             "echo \"Install some plugins and start the service with\"",
@@ -42,17 +45,21 @@
         "postun": [
             "rm -rf /etc/tourbillon",
             "rm -rf /var/log/tourbillon",
+            "rm -f /etc/profile.d/tourbillon.sh",
+            "rm -f /etc/logrotate.d/tourbillon",
             "userdel tourbillon"
         ],
         "preun": [
             "/etc/init.d/tourbillon stop 2>/dev/null >/dev/null || true",
-            "chkconfig --del tourbillon"
+            "chkconfig --del tourbillon || true"
         ]
     },
     "file_extras": {
         "files": [
-            "conf/etc/init.d/tourbillon:etc/init.d/tourbillon",
-            "conf/etc/profile.d/tourbillon.sh:etc/profile.d/tourbillon.sh"
+            "conf_redhat/etc/init.d/tourbillon:etc/init.d/tourbillon",
+            "conf_redhat/etc/profile.d/tourbillon.sh:etc/profile.d/tourbillon.sh",
+            "conf_redhat/etc/logrotate.d/tourbillon:etc/logrotate.d/tourbillon",
+            "conf_redhat/usr/local/bin/tourbillon:usr/local/bin/tourbillon"
         ]
     },
     "file_permissions": {
