@@ -35,7 +35,7 @@
             "chown tourbillon /var/log/tourbillon",
             "chown tourbillon /var/run/tourbillon",
             "chmod 644 /etc/logrotate.d/tourbillon",
-            "chmod 755 /usr/local/bin/tourbillon",
+            "chmod 755 /usr/local/bin/tourbillond",
             "chmod 755 /etc/init.d/tourbillon",
             "chkconfig --add tourbillon",
             "echo \"Run '/usr/share/python/tourbillon/bin/tourbillon init' to create the tourbillon config file\"",
@@ -45,6 +45,8 @@
         "postun": [
             "rm -rf /etc/tourbillon",
             "rm -rf /var/log/tourbillon",
+            "rm -rf /var/run/tourbillon",
+            "rm -rf /usr/share/python/tourbillon",
             "rm -f /etc/profile.d/tourbillon.sh",
             "rm -f /etc/logrotate.d/tourbillon",
             "userdel tourbillon"
@@ -59,7 +61,7 @@
             "conf_redhat/etc/init.d/tourbillon:etc/init.d/tourbillon",
             "conf_redhat/etc/profile.d/tourbillon.sh:etc/profile.d/tourbillon.sh",
             "conf_redhat/etc/logrotate.d/tourbillon:etc/logrotate.d/tourbillon",
-            "conf_redhat/usr/local/bin/tourbillon:usr/local/bin/tourbillon"
+            "conf_redhat/usr/local/bin/tourbillond:usr/local/bin/tourbillond"
         ]
     },
     "file_permissions": {

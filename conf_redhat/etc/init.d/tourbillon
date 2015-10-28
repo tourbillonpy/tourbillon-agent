@@ -24,7 +24,7 @@ export PATH
 
 lockfile="/var/lock/subsys/tourbillon"
 pidfile="/var/run/tourbillon/tourbillon.pid"
-tourbillond="/usr/local/bin/tourbillon"
+tourbillond="/usr/local/bin/tourbillond"
 RETVAL=0
 
 . /etc/init.d/functions

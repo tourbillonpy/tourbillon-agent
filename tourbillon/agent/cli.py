@@ -11,6 +11,8 @@ except ImportError:
 
 import click
 
+PY34_PLUS = sys.version_info[0] == 3 and sys.version_info[1] >= 4
+PY27 = sys.version_info[0] == 2 and sys.version_info[1] == 7
 
 LOG_FORMAT_EX = '%(asctime)s %(levelname)s [%(name)s %(filename)s:'\
     '%(funcName)s:%(lineno)d] %(message)s'
@@ -18,6 +20,12 @@ LOG_FORMAT_NO = '%(asctime)s %(levelname)s %(message)s'
 
 INDEX_FILE_URL = 'https://raw.githubusercontent.com/tourbillon-python/'\
     'tourbillon-agent/master/meta/plugin_index.json'
+
+
+def get_index():
+    index = {k: v for (k, v) in json.load(urlopen(INDEX_FILE_URL)).items()
+             if PY34_PLUS and v['py3'] or PY27 and v['py2']}
+    return index
 
 
 @click.group()
@@ -103,7 +111,7 @@ def init(ctx):
 @cli.command()
 @click.pass_context
 def list(ctx):
-    index = json.load(urlopen(INDEX_FILE_URL))
+    index = get_index()
 
     top = '+{:<20}+{:<5}+{:<60}+{:<35}+-+'.format('-' * 20,
                                                   '-' * 5,
@@ -130,7 +138,7 @@ def list(ctx):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def install(ctx, plugin):
-    index = json.load(urlopen(INDEX_FILE_URL))
+    index = get_index()
     if plugin not in index:
         click.echo(click.style(
                    'plugin {} not found!'.format(plugin), fg='red'))
@@ -147,7 +155,7 @@ def install(ctx, plugin):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def upgrade(ctx, plugin):
-    index = json.load(urlopen(INDEX_FILE_URL))
+    index = get_index()
     if plugin not in index:
         click.echo(click.style(
                    'plugin {} not found!'.format(plugin), fg='red'))
@@ -165,7 +173,7 @@ def upgrade(ctx, plugin):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def reinstall(ctx, plugin):
-    index = json.load(urlopen(INDEX_FILE_URL))
+    index = get_index()
     if plugin not in index:
         click.echo(click.style(
                    'plugin {} not found!'.format(plugin), fg='red'))
@@ -310,7 +318,7 @@ def run(ctx):
     """run the agent"""
     pid_file = ctx.parent.params['pidfile']
     with open(pid_file, 'w') as f:
-        f.write(os.getpid())
+        f.write(str(os.getpid()))
     config_file = ctx.parent.params['config']
     from tourbillon.agent import Tourbillon
     ag = Tourbillon(config_file)

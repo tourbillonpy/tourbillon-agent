@@ -24,6 +24,8 @@ PID=/var/run/tourbillon/tourbillon.pid
 DAEMON_OPTS=run
 STOP_SCHEDULE="${STOP_SCHEDULE:-QUIT/5/TERM/5/KILL/5}"
 
+. /lib/lsb/init-functions
+
 test -x $DAEMON || exit 0
 
 
@@ -35,7 +37,7 @@ do_start()
 {
 	start-stop-daemon --start --quiet --pidfile $PID --chuid tourbillon --exec $DAEMON --test > /dev/null \
 		|| return 1
-	start-stop-daemon --start --background --quiet --pidfile $PID --make-pidfile --chuid tourbillon --exec $DAEMON -- \
+	start-stop-daemon --start --background --quiet --pidfile $PID --chuid tourbillon --exec $DAEMON -- \
 		$DAEMON_OPTS 2>/dev/null \
 		|| return 2
 }
