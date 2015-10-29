@@ -49,14 +49,12 @@ Run dpkg to install it:
 
 ```
 $ sudo dpkg -i tourbillon_0.4_amd64.deb
-
 ```
 
 or for the 32 bit version:
 
 ```
 $ sudo dpkg -i tourbillon_0.4_i386.deb
-
 ```
 
 
@@ -76,14 +74,12 @@ Run rpm to install it:
 
 ```
 $ sudo rpm -i tourbillon-0.4-1.x86_64.rpm
-
 ```
 
 or for the 32 bit version:
 
 ```
 $ sudo rpm -i tourbillon-0.4-1.i386.rpm
-
 ```
 
 
@@ -106,7 +102,7 @@ To generate the configuration file type the following command:
 
 ```
 $ tourbillon init
-````
+```
 
 The init command will ask you for the InfluxDB's connection parameters and the logging configuration.
 
