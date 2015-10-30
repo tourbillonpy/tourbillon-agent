@@ -49,6 +49,7 @@
             "rm -rf /usr/share/python/tourbillon",
             "rm -f /etc/profile.d/tourbillon.sh",
             "rm -f /etc/logrotate.d/tourbillon",
+            "rm -f /etc/bash_completion.d/tourbillon",
             "userdel tourbillon"
         ],
         "preun": [
@@ -61,6 +62,7 @@
             "conf_redhat/etc/init.d/tourbillon:etc/init.d/tourbillon",
             "conf_redhat/etc/profile.d/tourbillon.sh:etc/profile.d/tourbillon.sh",
             "conf_redhat/etc/logrotate.d/tourbillon:etc/logrotate.d/tourbillon",
+            "conf_redhat/etc/bash_completion.d/tourbillon:etc/bash_completion.d/tourbillon",
             "conf_redhat/usr/local/bin/tourbillond:usr/local/bin/tourbillond"
         ]
     },

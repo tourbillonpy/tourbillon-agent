@@ -3,11 +3,6 @@
 
 -----
 
-
-
-
-
-
 # What is tourbillon
 
 tourbillon is an efficient, very simple and extensible agent that allows to collect metrics from servers or services and writes them into a InfluxDB.
@@ -41,9 +36,9 @@ There are no special requirements to run tourbillon.
 Download the debian package for your architecture:
 
 
-[tourbillon_0.4_amd64.deb](http://)
+[tourbillon_0.4_amd64.deb](https://github.com/tourbillonpy/tourbillon-agent/attachments/releases/download/0.4/tourbillon_0.4_amd64.deb)
 
-[tourbillon_0.4_i386.deb](http://)
+[tourbillon_0.4_i386.deb](https://github.com/tourbillonpy/tourbillon-agent/attachments/releases/download/0.4/tourbillon_0.4_i386.deb)
 
 Run dpkg to install it:
 
@@ -65,9 +60,9 @@ $ sudo dpkg -i tourbillon_0.4_i386.deb
 Download the rpm package for your architecture:
 
 
-[tourbillon-0.4-1.x86_64.rpm](http://)
+[tourbillon-0.4-1.x86_64.rpm](https://github.com/tourbillonpy/tourbillon-agent/attachments/releases/download/0.4/tourbillon-0.4-1.x86_64.rpm)
 
-[tourbillon-0.4-1.i386.rpm](http://)
+[tourbillon-0.4-1.i386.rpm](https://github.com/tourbillonpy/tourbillon-agent/attachments/releases/download/0.4/tourbillon-0.4-1.i386.rpm)
 
 
 Run rpm to install it:
@@ -84,8 +79,10 @@ $ sudo rpm -i tourbillon-0.4-1.i386.rpm
 
 
 
-### Install with pip
-_It's strongly recomended to install tourbillon inside a virtualenv._
+### Using pip
+
+**_It's strongly recomended to install tourbillon inside a virtualenv._**
+
 
 ```
 $ pip install tourbillon
@@ -121,7 +118,7 @@ $ tourbillon list
 The output of this command will only show the plugins compatible with you python runtime version.
 
 
-## Plugins installation
+## Install plugins
 
 To install a plugin enter:
 
@@ -134,14 +131,25 @@ By default tourbillon search for the plugins configuration file in **/etc/tourbi
 Please refer to the plugin documentation for detailed instruction.
 
 
+# Start tourbillon
 
-# Usage
+If you have installed tourbillon from a distribution package enter:
 
-blah blah
+```
+$ sudo /etc/init.d/tourbillon start
+```
+
+If you have installed tourbillon with pip type:
+
+```
+$ tourbillon run
+```
+
+
 
 # Contributing
 
-blah blah
+If you want to contribute to the project, you can submit bugs, feature requests, translations or fork the github repository and submit your pull request.
 
 
 # Credits
