@@ -15,7 +15,9 @@ if not PY34_PLUS:
 
 setup(
     name='tourbillon',
-    version='0.2',
+    version='0.3',
+    description='A Python agent for collecting metrics and store them into'
+    ' an InfluxDB.',
     packages=find_packages(exclude=exclude),
     install_requires=install_requires,
     entry_points={
@@ -24,5 +26,23 @@ setup(
         ]
     },
     zip_safe=False,
-    namespace_packages=['tourbillon']
+    namespace_packages=['tourbillon'],
+    author='The Tourbillon Team',
+    author_email='tourbillonpy@gmail.com',
+    url='https://github.com/tourbillon-python/tourbillon-agent',
+    license='ASF',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: Apache Software License',
+        'Operating System :: POSIX :: Linux',
+        'Programming Language :: Python',
+        'Topic :: Internet :: WWW/HTTP :: Indexing/Search',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Topic :: System :: Monitoring',
+    ],
+    keywords='monitoring metrics agent influxdb',
 )

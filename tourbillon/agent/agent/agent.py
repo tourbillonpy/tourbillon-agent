@@ -43,8 +43,14 @@ class Tourbillon(object):
         with open(config_file, 'r') as f:
             self._config = json.load(f)
 
-        logging.basicConfig(level=self._config['log_level'],
-                            format=self._config['log_format'])
+        formatter = logging.Formatter(fmt=self._config['log_format'])
+        handler = logging.handlers.WatchedFileHandler(
+            '/var/log/tourbillon/tourbillon.log')
+        handler.setFormatter(formatter)
+        handler.setLevel(getattr(logging, self._config['log_level']))
+        logging.getLogger().addHandler(handler)
+        logging.getLogger().setLevel(
+            getattr(logging, self._config['log_level']))
         logger.info('Use config file: %s', config_file)
 
         self._load_plugins_config(os.path.abspath(
