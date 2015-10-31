@@ -9,7 +9,8 @@ To install Tourbillon using pip type: ::
 	$ pip install tourbillon
 
 
-It's strongly recommended to install Tourbillon in a virtualenv.
+.. note::
+	It's strongly recommended to install Tourbillon in a virtualenv.
 
 
 
