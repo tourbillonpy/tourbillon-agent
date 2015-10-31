@@ -110,7 +110,8 @@ def init(ctx):
 
 @cli.command()
 @click.pass_context
-def list(ctx):
+@click.option('--compact', default=False, is_flag=True)
+def list(ctx, compact):
     index = get_index()
 
     top = '+{:<20}+{:<5}+{:<60}+{:<35}+-+'.format('-' * 20,
@@ -123,15 +124,19 @@ def list(ctx):
                                                      'author')
     line = '|{:<20}|{:<5}|{:<60}|{:<35}|{}|'
 
-    print(top)
-    print(header)
-    print(top)
+    if not compact:
+        print(top)
+        print(header)
+        print(top)
 
     for name, meta in index.items():
-        print(line.format(name, meta['version'], meta['description'],
-                          meta['author'], '*' if meta['featured'] else ''))
-
-    print(top)
+        if not compact:
+            print(line.format(name, meta['version'], meta['description'],
+                              meta['author'], '*' if meta['featured'] else ''))
+        else:
+            print(name)
+    if not compact:
+        print(top)
 
 
 @cli.command()
