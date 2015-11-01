@@ -15,7 +15,7 @@ if not PY34_PLUS:
 
 setup(
     name='tourbillon',
-    version='0.3',
+    version='0.4',
     description='A Python agent for collecting metrics and store them into'
     ' an InfluxDB.',
     packages=find_packages(exclude=exclude),
@@ -29,7 +29,7 @@ setup(
     namespace_packages=['tourbillon'],
     author='The Tourbillon Team',
     author_email='tourbillonpy@gmail.com',
-    url='https://github.com/tourbillon-python/tourbillon-agent',
+    url='https://github.com/tourbillonpy/tourbillon-agent',
     license='ASF',
     classifiers=[
         'Development Status :: 4 - Beta',
