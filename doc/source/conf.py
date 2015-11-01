@@ -58,7 +58,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Tourbillon'
+project = 'tourbillon'
 copyright = '2015, The Tourbillon Team'
 author = 'The Tourbillon Team'
 
