@@ -241,7 +241,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   (master_doc, 'tourbillon.tex', 'tourbillon Documentation',
-   'Tourbillon team', 'manual'),
+   'The Tourbillon Team', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
