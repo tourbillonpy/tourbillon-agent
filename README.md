@@ -18,7 +18,7 @@ tourbillon works under python 2.7 and python 3.4 or greater.
 # Documentation
 
 You can browse the tourbillon documentation online, it is hosted on Read The Docs.
-The documentation of the latest version of tourbillon can be found here.
+The documentation of the latest version of tourbillon can be found [here](http://tourbillon.readthedocs.org/en/latest/).
 
 
 # Getting started
