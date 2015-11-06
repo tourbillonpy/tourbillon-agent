@@ -1,6 +1,5 @@
 API Documentation
 =================
 
-
-.. automodule:: tourbillon.agent.agent
+.. autoclass:: tourbillon.agent.Tourbillon
    :members:

@@ -5,7 +5,7 @@
 
 
 Welcome to Tourbillon's documentation!
-===============================================
+======================================
 
 Tourbillon is an agent for collecting metrics from servers or services and store them into an InfluxDB.
 
@@ -19,6 +19,7 @@ Contents:
 
    about
    install
+   configure
    use
    plugins
    write_your_own

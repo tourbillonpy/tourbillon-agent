@@ -112,6 +112,7 @@ def init(ctx):
 @click.pass_context
 @click.option('--compact', default=False, is_flag=True)
 def list(ctx, compact):
+    """list available tourbillon plugins"""
     index = get_index()
 
     top = '+{:<20}+{:<5}+{:<60}+{:<35}+-+'.format('-' * 20,
@@ -143,6 +144,7 @@ def list(ctx, compact):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def install(ctx, plugin):
+    """install tourbillon plugin"""
     index = get_index()
     if plugin not in index:
         click.echo(click.style(
@@ -160,6 +162,7 @@ def install(ctx, plugin):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def upgrade(ctx, plugin):
+    """upgrade tourbillon plugin"""
     index = get_index()
     if plugin not in index:
         click.echo(click.style(
@@ -178,6 +181,7 @@ def upgrade(ctx, plugin):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def reinstall(ctx, plugin):
+    """reinstall tourbillon plugin"""
     index = get_index()
     if plugin not in index:
         click.echo(click.style(
