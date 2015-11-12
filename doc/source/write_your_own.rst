@@ -1,23 +1,23 @@
 Write your own plugin
 *********************
 
-A Tourbillon's plugin is a function that has the following signature: ::
+A tourbillon's plugin is a set of collector functions which one has the following signature: ::
 
-	def myplugin(agent):
+	def my_collector(agent):
 		pass
 
 
-The Tourbillon agent expose methods to create a database for your metrics, create a retention policy for your database and push your metrics to an influxDB.
+The tourbillon agent expose methods to create a database for your metrics, create a retention policy for your database and push your metrics to an influxDB.
 
 
 
-Write your plugin as asyncio coroutine
-======================================
+Write your collector function as asyncio coroutine
+==================================================
 
-To write your plugin as a coroutine you have to decorate your function as follow: ::
+To write your collector function as a coroutine you have to decorate your function as follow: ::
 
 	@asyncio.coroutine
-	def myplugin(agent):
+	def my_collector(agent):
 		pass
 
 Than you need to wait for the agent become ready. You have to access the agent run_event property and wait for the event to be set: ::

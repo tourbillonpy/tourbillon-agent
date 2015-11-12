@@ -1,10 +1,10 @@
-About Tourbillon
+About tourbillon
 ****************
 
-What is Tourbillon
+What is tourbillon
 ==================
 
-Tourbillon is an efficient, very simple and extensible agent that allows to collect metrics from servers or services and writes them into a InfluxDB.
+tourbillon is an efficient, very simple and extensible agent that allows to collect metrics from servers or services and writes them into a InfluxDB.
 
 It's is written in pure python.
 
@@ -20,7 +20,7 @@ tourbillon works under python 2.7 and python 3.4 or greater.
 License
 =======
 
-Tourbillon has been released under the Apache Software License 2.0.
+tourbillon has been released under the Apache Software License 2.0.
 
 See `http://www.apache.org/licenses/LICENSE-2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_ for more information.
 

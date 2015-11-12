@@ -23,7 +23,11 @@ INDEX_FILE_URL = 'https://raw.githubusercontent.com/tourbillon-python/'\
 
 
 def get_index():
-    index = {k: v for (k, v) in json.load(urlopen(INDEX_FILE_URL)).items()
+    data = urlopen(INDEX_FILE_URL).read()
+    if PY34_PLUS:
+        data = data.decode()
+
+    index = {k: v for (k, v) in json.loads(data).items()
              if PY34_PLUS and v['py3'] or PY27 and v['py2']}
     return index
 
