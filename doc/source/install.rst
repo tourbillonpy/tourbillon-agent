@@ -1,4 +1,4 @@
-Install Tourbillon
+Install tourbillon
 ******************
 
 
@@ -6,6 +6,7 @@ Requirements
 ============
 
 There are no special requirements to run tourbillon.
+
 
 Installation
 ============
@@ -70,7 +71,7 @@ To install tourbillon from PyPI at a command prompt types: ::
 
 .. note::
 	
-	It is strongly reccomended to install Tourbillon in a virtualenv.
+	It is strongly reccomended to install tourbillon in a virtualenv.
 
 
 
