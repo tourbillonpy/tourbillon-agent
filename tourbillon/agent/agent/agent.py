@@ -46,7 +46,7 @@ class Tourbillon(object):
 
         formatter = logging.Formatter(fmt=self._config['log_format'])
         handler = logging.handlers.WatchedFileHandler(
-            '/var/log/tourbillon/tourbillon.log')
+            self._config['log_file'])
         handler.setFormatter(formatter)
         handler.setLevel(getattr(logging, self._config['log_level']))
         logging.getLogger().addHandler(handler)

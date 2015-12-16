@@ -47,7 +47,7 @@ class Tourbillon(object):
 
         formatter = logging.Formatter(fmt=self._config['log_format'])
         handler = logging.handlers.WatchedFileHandler(
-            '/var/log/tourbillon/tourbillon.log')
+            self._config['log_file'])
         handler.setFormatter(formatter)
         handler.setLevel(getattr(logging, self._config['log_level']))
         logging.getLogger().addHandler(handler)
@@ -82,6 +82,7 @@ class Tourbillon(object):
     def config(self):
         """returns a dictionary that contains configuration for each enabled
         plugin"""
+
         return self._pluginconfig
 
     @property
@@ -98,12 +99,14 @@ class Tourbillon(object):
 
     def push(self, points, database):
         """write syncronously datapoints to InfluxDB"""
+
         self._influxdb.write_points(points, database=database)
 
     def create_database(self, name, duration=None, replication=None,
                         default=True):
         """create syncronously a database and a retention policy
         in the InfluxDB instance"""
+
         if name not in self._databases:
             self._influxdb.create_database(name)
             logger.info('database %s created successfully', name)
@@ -145,6 +148,7 @@ class Tourbillon(object):
     @asyncio.coroutine
     def async_push(self, points, database):
         """write asyncronously datapoints to InfluxDB"""
+
         yield From(self._loop.run_in_executor(
             None,
             functools.partial(self._influxdb.write_points,
@@ -238,6 +242,7 @@ class Tourbillon(object):
 
     def stop(self):
         """stop the tourbillon agent"""
+
         self._loop.remove_signal_handler(signal.SIGINT)
         self._loop.remove_signal_handler(signal.SIGTERM)
         logger.info('shutting down tourbillon...')
@@ -246,6 +251,7 @@ class Tourbillon(object):
 
     def run(self):
         """start the tourbillon agent"""
+
         logger.info('starting tourbillon...')
         self._loop.add_signal_handler(signal.SIGINT, self.stop)
         self._loop.add_signal_handler(signal.SIGTERM, self.stop)

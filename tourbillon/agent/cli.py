@@ -17,6 +17,7 @@ PY27 = sys.version_info[0] == 2 and sys.version_info[1] == 7
 LOG_FORMAT_EX = '%(asctime)s %(levelname)s [%(name)s %(filename)s:'\
     '%(funcName)s:%(lineno)d] %(message)s'
 LOG_FORMAT_NO = '%(asctime)s %(levelname)s %(message)s'
+LOG_FILENAME = '/var/log/tourbillon/tourbillon.log'
 
 INDEX_FILE_URL = 'https://raw.githubusercontent.com/tourbillon-python/'\
     'tourbillon-agent/master/meta/plugin_index.json'
@@ -88,6 +89,8 @@ def init(ctx):
         'default',
         'extended']), default='default')
 
+    log_file = click.prompt('Enter the log filename', default=LOG_FILENAME)
+
     fmt = LOG_FORMAT_NO if log_format == 'default' else LOG_FORMAT_EX
     config = {
         'database': {
@@ -96,6 +99,7 @@ def init(ctx):
         },
         'log_format': fmt,
         'log_level': log_level,
+        'log_file': log_file,
         'plugins_conf_dir': '${tourbillon_conf_dir}/conf.d'
     }
     if username:
