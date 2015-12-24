@@ -1,0 +1,13 @@
+tourbillon standard plugins
+===========================
+
+
+Tourbillon has the following standard plugins:
+
+	* `tourbillon-linux <http://tourbillon-linux.readthedocs.org/en/latest>`_: get metrics from a linux host
+	* `tourbillon-log <http://tourbillon-log.readthedocs.org/en/latest>`_: get metrics from a log file
+	* `tourbillon-uwsgi <http://tourbillon-uwsgi.readthedocs.org/en/latest>`_: get metrics from a uWSGI stats server
+	* `tourbillon-celery <http://tourbillon-celery.readthedocs.org/en/latest>`_: get metrics from Celery
+	
+	
+	
