@@ -38,7 +38,7 @@ Vagrant.configure(2) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-
+  config.vm.synced_folder "../../../", "/home/vagrant/tourbillon"
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
@@ -64,8 +64,20 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   sudo apt-get update
-  #   sudo apt-get install -y apache2
-  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo yum groupinstall -y "Development tools"
+    sudo yum install -y zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+    wget https://www.python.org/ftp/python/2.7.10/Python-2.7.10.tgz
+    tar xvfz Python-2.7.10.tgz
+    cd Python-2.7.10
+    ./configure
+    make
+    sudo make altinstall
+    cd ..
+    wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py
+    sudo python2.7 ez_setup.py 
+    sudo easy_install-2.7 pip
+    sudo pip2.7 install rpmvenv
+    sudo pip2.7 install virtualenv
+  SHELL
 end
