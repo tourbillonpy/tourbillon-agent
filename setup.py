@@ -7,7 +7,7 @@ PY34_PLUS = sys.version_info[0] == 3 and sys.version_info[1] >= 4
 exclude = ['tourbillon.agent.agent2'
            if PY34_PLUS else 'tourbillon.agent.agent']
 
-install_requires = ['influxdb==2.8.0', 'click==5.1']
+install_requires = ['influxdb>=2.8.0', 'click==5.1']
 
 if not PY34_PLUS:
     install_requires.append('trollius==2.0')
@@ -15,7 +15,7 @@ if not PY34_PLUS:
 
 setup(
     name='tourbillon',
-    version='0.3',
+    version='0.4.1',
     description='A Python agent for collecting metrics and store them into'
     ' an InfluxDB.',
     packages=find_packages(exclude=exclude),
@@ -29,7 +29,7 @@ setup(
     namespace_packages=['tourbillon'],
     author='The Tourbillon Team',
     author_email='tourbillonpy@gmail.com',
-    url='https://github.com/tourbillon-python/tourbillon-agent',
+    url='https://github.com/tourbillonpy/tourbillon-agent',
     license='ASF',
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -38,7 +38,6 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: POSIX :: Linux',
         'Programming Language :: Python',
-        'Topic :: Internet :: WWW/HTTP :: Indexing/Search',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',

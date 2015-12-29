@@ -17,13 +17,18 @@ PY27 = sys.version_info[0] == 2 and sys.version_info[1] == 7
 LOG_FORMAT_EX = '%(asctime)s %(levelname)s [%(name)s %(filename)s:'\
     '%(funcName)s:%(lineno)d] %(message)s'
 LOG_FORMAT_NO = '%(asctime)s %(levelname)s %(message)s'
+LOG_FILENAME = '/var/log/tourbillon/tourbillon.log'
 
 INDEX_FILE_URL = 'https://raw.githubusercontent.com/tourbillon-python/'\
     'tourbillon-agent/master/meta/plugin_index.json'
 
 
 def get_index():
-    index = {k: v for (k, v) in json.load(urlopen(INDEX_FILE_URL)).items()
+    data = urlopen(INDEX_FILE_URL).read()
+    if PY34_PLUS:
+        data = data.decode()
+
+    index = {k: v for (k, v) in json.loads(data).items()
              if PY34_PLUS and v['py3'] or PY27 and v['py2']}
     return index
 
@@ -88,6 +93,8 @@ def init(ctx):
         'default',
         'extended']), default='default')
 
+    log_file = click.prompt('Enter the log filename', default=LOG_FILENAME)
+
     fmt = LOG_FORMAT_NO if log_format == 'default' else LOG_FORMAT_EX
     config = {
         'database': {
@@ -96,6 +103,7 @@ def init(ctx):
         },
         'log_format': fmt,
         'log_level': log_level,
+        'log_file': log_file,
         'plugins_conf_dir': '${tourbillon_conf_dir}/conf.d'
     }
     if username:
@@ -112,6 +120,7 @@ def init(ctx):
 @click.pass_context
 @click.option('--compact', default=False, is_flag=True)
 def list(ctx, compact):
+    """list available tourbillon plugins"""
     index = get_index()
 
     top = '+{:<20}+{:<5}+{:<60}+{:<35}+-+'.format('-' * 20,
@@ -143,6 +152,7 @@ def list(ctx, compact):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def install(ctx, plugin):
+    """install tourbillon plugin"""
     index = get_index()
     if plugin not in index:
         click.echo(click.style(
@@ -152,6 +162,8 @@ def install(ctx, plugin):
     meta = index[plugin]
     if 'pip_cmd' in meta:
         plugin = meta['pip_cmd']
+    else:
+        plugin = '{}=={}'.format(plugin, meta['version'])
     pip_args.append(plugin)
     pip.main(pip_args)
 
@@ -160,6 +172,7 @@ def install(ctx, plugin):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def upgrade(ctx, plugin):
+    """upgrade tourbillon plugin"""
     index = get_index()
     if plugin not in index:
         click.echo(click.style(
@@ -169,6 +182,8 @@ def upgrade(ctx, plugin):
     meta = index[plugin]
     if 'pip_cmd' in meta:
         plugin = meta['pip_cmd']
+    else:
+        plugin = '{}=={}'.format(plugin, meta['version'])
     pip_args = ['install', '-U']
     pip_args.append(plugin)
     pip.main(pip_args)
@@ -178,6 +193,7 @@ def upgrade(ctx, plugin):
 @click.pass_context
 @click.argument('plugin', nargs=1, required=True)
 def reinstall(ctx, plugin):
+    """reinstall tourbillon plugin"""
     index = get_index()
     if plugin not in index:
         click.echo(click.style(
@@ -187,6 +203,8 @@ def reinstall(ctx, plugin):
     meta = index[plugin]
     if 'pip_cmd' in meta:
         plugin = meta['pip_cmd']
+    else:
+        plugin = '{}=={}'.format(plugin, meta['version'])
     pip_args = ['install', '--force-reinstall', '-U']
     pip_args.append(plugin)
     pip.main(pip_args)

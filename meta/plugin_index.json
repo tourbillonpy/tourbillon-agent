@@ -1,0 +1,34 @@
+{ 
+	"tourbillon-linux": {
+		"version": "0.4.1",
+		"description": "tourbillon linux plugin",
+		"author": "The Tourbillon Team",
+		"featured": true,
+		"py2": true,
+		"py3": true
+	},
+	"tourbillon-uwsgi":	{
+		"version": "0.4.1",
+		"description": "tourbillon uwsgi plugin",
+		"author": "The Tourbillon Team",
+		"featured": true,
+		"py2": true,
+		"py3": true
+	},
+	"tourbillon-celery":	{
+		"version": "0.4.1",
+		"description": "tourbillon uwsgi plugin",
+		"author": "The Tourbillon Team",
+		"featured": true,
+		"py2": true,
+		"py3": true
+	},
+	"tourbillon-log":	{
+		"version": "0.4.1",
+		"description": "tourbillon uwsgi plugin",
+		"author": "The Tourbillon Team",
+		"featured": true,
+		"py2": true,
+		"py3": true
+	}
+}

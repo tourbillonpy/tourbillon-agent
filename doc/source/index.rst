@@ -4,10 +4,10 @@
    contain the root `toctree` directive.
 
 
-Welcome to Tourbillon's documentation!
-===============================================
+Welcome to tourbillon's documentation!
+======================================
 
-Tourbillon is an agent for collecting metrics from servers or services and store them into an InfluxDB.
+tourbillon is an agent for collecting metrics from servers or services and store them into an InfluxDB.
 
 
 
@@ -19,6 +19,7 @@ Contents:
 
    about
    install
+   configure
    use
    plugins
    write_your_own

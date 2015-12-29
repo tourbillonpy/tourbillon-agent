@@ -29,7 +29,8 @@ def _to_hours(period):
 
 class Tourbillon(object):
 
-    """docstring for ClassName"""
+    """create a tourbillon instance reading its configuration from config_file
+    """
 
     def __init__(self, config_file):
         super(Tourbillon, self).__init__()
@@ -45,7 +46,7 @@ class Tourbillon(object):
 
         formatter = logging.Formatter(fmt=self._config['log_format'])
         handler = logging.handlers.WatchedFileHandler(
-            '/var/log/tourbillon/tourbillon.log')
+            self._config['log_file'])
         handler.setFormatter(formatter)
         handler.setLevel(getattr(logging, self._config['log_level']))
         logging.getLogger().addHandler(handler)
@@ -77,6 +78,9 @@ class Tourbillon(object):
 
     @property
     def config(self):
+        """returns a dictionary that contains configuration for each enabled
+        plugin"""
+
         return self._pluginconfig
 
     @property
@@ -92,10 +96,14 @@ class Tourbillon(object):
             return self._thr_run_event
 
     def push(self, points, database):
+        """write syncronously datapoints to InfluxDB"""
+
         self._influxdb.write_points(points, database=database)
 
     def create_database(self, name, duration=None, replication=None,
                         default=True):
+        """create syncronously a database and a retention policy
+        in the InfluxDB instance"""
 
         if name not in self._databases:
             self._influxdb.create_database(name)
@@ -137,6 +145,8 @@ class Tourbillon(object):
 
     @asyncio.coroutine
     def async_push(self, points, database):
+        """write asyncronously datapoints to InfluxDB"""
+
         yield from self._loop.run_in_executor(
             None,
             functools.partial(self._influxdb.write_points,
@@ -145,6 +155,8 @@ class Tourbillon(object):
     @asyncio.coroutine
     def async_create_database(self, name, duration=None, replication=None,
                               default=True):
+        """create asyncronously a database and a retention policy
+        in the InfluxDB instance"""
 
         if name not in self._databases:
             yield from self._loop.run_in_executor(
@@ -198,7 +210,7 @@ class Tourbillon(object):
             logger.info('retention policy %s created successfully',
                         tourbillon_rp_name)
 
-    def load_tasks(self):
+    def _load_tasks(self):
         if 'plugins' not in self._config:
             logger.warn('no plugin configured.')
             return
@@ -227,6 +239,8 @@ class Tourbillon(object):
         logger.debug('configured tasks: %s', self._tasks)
 
     def stop(self):
+        """stop the tourbillon agent"""
+
         self._loop.remove_signal_handler(signal.SIGINT)
         self._loop.remove_signal_handler(signal.SIGTERM)
         logger.info('shutting down tourbillon...')
@@ -234,10 +248,12 @@ class Tourbillon(object):
         self._thr_run_event.clear()
 
     def run(self):
+        """start the tourbillon agent"""
+
         logger.info('starting tourbillon...')
         self._loop.add_signal_handler(signal.SIGINT, self.stop)
         self._loop.add_signal_handler(signal.SIGTERM, self.stop)
-        self.load_tasks()
+        self._load_tasks()
         self._aio_run_event.set()
         self._thr_run_event.set()
         logger.info('tourbillon started')
