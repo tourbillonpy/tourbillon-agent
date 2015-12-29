@@ -162,6 +162,8 @@ def install(ctx, plugin):
     meta = index[plugin]
     if 'pip_cmd' in meta:
         plugin = meta['pip_cmd']
+    else:
+        plugin = '{}=={}'.format(plugin, meta['version'])
     pip_args.append(plugin)
     pip.main(pip_args)
 
@@ -180,6 +182,8 @@ def upgrade(ctx, plugin):
     meta = index[plugin]
     if 'pip_cmd' in meta:
         plugin = meta['pip_cmd']
+    else:
+        plugin = '{}=={}'.format(plugin, meta['version'])
     pip_args = ['install', '-U']
     pip_args.append(plugin)
     pip.main(pip_args)
@@ -199,6 +203,8 @@ def reinstall(ctx, plugin):
     meta = index[plugin]
     if 'pip_cmd' in meta:
         plugin = meta['pip_cmd']
+    else:
+        plugin = '{}=={}'.format(plugin, meta['version'])
     pip_args = ['install', '--force-reinstall', '-U']
     pip_args.append(plugin)
     pip.main(pip_args)

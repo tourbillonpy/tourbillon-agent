@@ -15,7 +15,7 @@ if not PY34_PLUS:
 
 setup(
     name='tourbillon',
-    version='0.4',
+    version='0.4.1',
     description='A Python agent for collecting metrics and store them into'
     ' an InfluxDB.',
     packages=find_packages(exclude=exclude),
