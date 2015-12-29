@@ -12,13 +12,14 @@
         "license": "ASF",
         "name": "tourbillon",
         "summary": "A Python agent for collecting metrics and store them into an InfluxDB.",
-        "version": "0.4",
+        "version": "0.4.1",
         "url": "https://github.com/tourbillon-python"
     },
     "python_venv": {
         "name": "tourbillon",
         "path": "/usr/share/python",
-        "requirements": ["requirements.txt"]
+        "requirements": ["requirements.txt"],
+        "pip_flags": "-U"
     },
     "blocks": {
         "desc": [
