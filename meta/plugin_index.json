@@ -32,7 +32,7 @@
 		"py3": true
 	},
 	"tourbillon-redis":	{
-		"version": "0.4.1",
+		"version": "0.4.2",
 		"description": "tourbillon redis plugin",
 		"author": "The Tourbillon Team",
 		"featured": true,
