@@ -9,6 +9,6 @@ Tourbillon has the following standard plugins:
 	* `tourbillon-uwsgi <http://tourbillon-uwsgi.readthedocs.org/en/latest>`_: get metrics from a uWSGI stats server
 	* `tourbillon-celery <http://tourbillon-celery.readthedocs.org/en/latest>`_: get metrics from Celery
 	* `tourbillon-redis <http://tourbillon-redis.readthedocs.org/en/latest>`_: get metrics from Redis
-	
+	* `tourbillon-memcached <http://tourbillon-memcached.readthedocs.org/en/latest>`_: get metrics from Memcached
 	
 	

@@ -38,5 +38,13 @@
 		"featured": true,
 		"py2": true,
 		"py3": true
+	},
+	"tourbillon-memcached":	{
+		"version": "0.4.2",
+		"description": "tourbillon memcached plugin",
+		"author": "The Tourbillon Team",
+		"featured": true,
+		"py2": true,
+		"py3": true
 	}
 }
