@@ -10,5 +10,5 @@ Tourbillon has the following standard plugins:
 	* `tourbillon-celery <http://tourbillon-celery.readthedocs.org/en/latest>`_: get metrics from Celery
 	* `tourbillon-redis <http://tourbillon-redis.readthedocs.org/en/latest>`_: get metrics from Redis
 	* `tourbillon-memcached <http://tourbillon-memcached.readthedocs.org/en/latest>`_: get metrics from Memcached
-	
+	* `tourbillon-nginx <http://tourbillon-nginx.readthedocs.org/en/latest>`_: get metrics from Nginx
 	

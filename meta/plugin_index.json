@@ -46,5 +46,13 @@
 		"featured": true,
 		"py2": true,
 		"py3": true
+	},
+	"tourbillon-nginx":	{
+		"version": "0.4.2",
+		"description": "tourbillon nginx plugin",
+		"author": "The Tourbillon Team",
+		"featured": true,
+		"py2": true,
+		"py3": true
 	}
 }
