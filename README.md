@@ -69,13 +69,13 @@ Download the rpm package for your architecture:
 Run rpm to install it:
 
 ```
-$ sudo rpm -i tourbillon-0.4.2-1.x86_64.rpm
+$ sudo rpm -i tourbillon-0.5-1.x86_64.rpm
 ```
 
 or for the 32 bit version:
 
 ```
-$ sudo rpm -i tourbillon-0.4.2-1.i686.rpm
+$ sudo rpm -i tourbillon-0.5-1.i686.rpm
 ```
 
 
