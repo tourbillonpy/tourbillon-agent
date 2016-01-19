@@ -37,20 +37,20 @@ There are no special requirements to run tourbillon.
 Download the debian package for your architecture:
 
 
-[tourbillon_0.4.2_amd64.deb](https://github.com/tourbillonpy/tourbillon-agent/releases/download/0.4.2/tourbillon_0.4.2_amd64.deb)
+[tourbillon_0.5_amd64.deb](https://github.com/tourbillonpy/tourbillon-agent/releases/download/0.5/tourbillon_0.5_amd64.deb)
 
-[tourbillon_0.4.2_i386.deb](https://github.com/tourbillonpy/tourbillon-agent/releases/download/0.4.2/tourbillon_0.4.2_i386.deb)
+[tourbillon_0.5_i386.deb](https://github.com/tourbillonpy/tourbillon-agent/releases/download/0.5/tourbillon_0.5_i386.deb)
 
 Run dpkg to install it:
 
 ```
-$ sudo dpkg -i tourbillon_0.4.2_amd64.deb
+$ sudo dpkg -i tourbillon_0.5_amd64.deb
 ```
 
 or for the 32 bit version:
 
 ```
-$ sudo dpkg -i tourbillon_0.4.2_i386.deb
+$ sudo dpkg -i tourbillon_0.5_i386.deb
 ```
 
 
@@ -61,9 +61,9 @@ $ sudo dpkg -i tourbillon_0.4.2_i386.deb
 Download the rpm package for your architecture:
 
 
-[tourbillon-0.4.2-1.x86_64.rpm](https://github.com/tourbillonpy/tourbillon-agent/releases/download/0.4.2/tourbillon-0.4.2-1.x86_64.rpm)
+[tourbillon-0.5-1.x86_64.rpm](https://github.com/tourbillonpy/tourbillon-agent/releases/download/0.5/tourbillon-0.5-1.x86_64.rpm)
 
-[tourbillon-0.4.2-1.i686.rpm](https://github.com/tourbillonpy/tourbillon-agent/releases/download/0.4.2/tourbillon-0.4.2-1.i686.rpm)
+[tourbillon-0.5-1.i686.rpm](https://github.com/tourbillonpy/tourbillon-agent/releases/download/0.5/tourbillon-0.5-1.i686.rpm)
 
 
 Run rpm to install it:
