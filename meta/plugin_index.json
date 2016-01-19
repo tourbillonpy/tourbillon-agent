@@ -54,5 +54,13 @@
 		"featured": true,
 		"py2": true,
 		"py3": true
+	},
+	"tourbillon-elasticsearch":	{
+		"version": "0.4.2",
+		"description": "tourbillon elasticsearch plugin",
+		"author": "The Tourbillon Team",
+		"featured": true,
+		"py2": true,
+		"py3": true
 	}
 }

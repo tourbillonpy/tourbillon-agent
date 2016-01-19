@@ -12,6 +12,7 @@ from string import Template
 
 import trollius as asyncio
 from trollius import From
+from concurrent.futures import ThreadPoolExecutor
 from importlib import import_module
 from influxdb import InfluxDBClient
 
@@ -219,6 +220,7 @@ class Tourbillon(object):
             logger.warn('no plugin configured.')
             return
         plugins = self._config['plugins']
+        thread_targets_count = 0
         for module_name, functions in plugins.items():
             logger.debug('search for tasks in module %s', module_name)
             module = import_module(module_name)
@@ -238,8 +240,13 @@ class Tourbillon(object):
                             candidate_task,
                             self))
                         task_type = 'function'
+                        thread_targets_count += 1
                     logger.info('task found: %s.%s, type=%s',
                                 module_name, task_name, task_type)
+        if thread_targets_count > 0:
+            self._loop.set_default_executor(ThreadPoolExecutor(
+                max_workers=thread_targets_count + 2)
+            )
         logger.debug('configured tasks: %s', self._tasks)
 
     def stop(self):
