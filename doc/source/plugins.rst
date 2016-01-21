@@ -11,4 +11,5 @@ Tourbillon has the following standard plugins:
 	* `tourbillon-redis <http://tourbillon-redis.readthedocs.org/en/latest>`_: get metrics from Redis
 	* `tourbillon-memcached <http://tourbillon-memcached.readthedocs.org/en/latest>`_: get metrics from Memcached
 	* `tourbillon-nginx <http://tourbillon-nginx.readthedocs.org/en/latest>`_: get metrics from Nginx
-	
+	* `tourbillon-elasticsearch <http://tourbillon-elasticsearch.readthedocs.org/en/latest>`_: get metrics from Elasticsearch
+	* `tourbillon-rabbitmq <http://tourbillon-rabbitmq.readthedocs.org/en/latest>`_: get metrics from RabbitMQ	

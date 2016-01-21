@@ -109,6 +109,7 @@ class Tourbillon(object):
 
         if name not in self._databases:
             self._influxdb.create_database(name)
+            self._databases.append(name)
             logger.info('database %s created successfully', name)
 
         if duration and replication:
@@ -165,6 +166,7 @@ class Tourbillon(object):
                 None,
                 self._influxdb.create_database,
                 name)
+            self._databases.append(name)
             logger.info('database %s created successfully', name)
 
         if duration and replication:
