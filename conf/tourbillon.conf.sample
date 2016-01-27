@@ -1,31 +1,68 @@
 {
   "database": {
-    "database": "celery",
-    "host": "jimi",
+    "host": "localhost", 
     "port": 8086
-  },
-  "log_format": "%(asctime)s %(levelname)s [%(name)s %(filename)s:%(funcName)s:%(lineno)d] %(message)s",
-  "log_level": "DEBUG",
+  }, 
+  "log_format": "%(asctime)s %(levelname)s [%(name)s %(filename)s:%(funcName)s:%(lineno)d] %(message)s", 
+  "log_level": "DEBUG", 
   "plugins": {
     "tourbillon.celery": [
       "get_celery_stats"
-    ],
-    "tourbillon.linux": [
-      "get_cpu_usage",
-      "get_memory_usage"
-    ],
-    "tourbillon.log": [
-      "get_logfile_metrics"
-    ],
-    "tourbillon.nginx": [
-      "get_nginx_status"
-    ],
-    "tourbillon.sea": [
-      "get_matw_stats"
-    ],
-    "tourbillon.uwsgi": [
-      "get_uwsgi_stats"
     ]
-  },
-  "plugins_conf_dir": "${tourbillon_conf_dir}/conf.d"
+  }, 
+  "plugins_conf_dir": "${tourbillon_conf_dir}/conf.d",
+  "notifications": {
+    "notifiers": [
+      {
+        "name": "hipchat",
+        "class": "tourbillon.notifiers.HipChatNotifier",
+        "params": {
+        }
+      },
+      {
+        "name": "email",
+        "class": "tourbillon.notifiers.EmailNotifier",
+        "params": {
+          "from": "",
+          "to": [],
+          "cc": [],
+          "bcc": [],
+          "host": "localhost",
+          "port": "25",
+          "username": "",
+          "password": "",
+          "use_tls": true,
+          "templates": {
+            "warning": {
+              "filename": "",
+              "subject": ""
+            }
+            "critical": {
+              "filename": "",
+              "subject": ""
+            }
+          }
+        }
+      }
+    ],
+    "alerts": [{
+      "name": "matw",
+      "query": "select hit_ratio from mmmm",
+      "notifiers": ["hipchat"],
+      "critical": {
+        "min": 80,
+        "frecuency": 10,
+        "occurrences": 4,
+        "lapse": 5
+
+      },
+      "warning": {
+        "mix": 60,
+        "max": 79,
+        "frecuency": 10,
+        "occurrences": 4,
+        "lapse": 5
+      }
+    }]
+  }
 }

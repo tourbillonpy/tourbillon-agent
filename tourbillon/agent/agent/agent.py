@@ -4,6 +4,7 @@ import glob
 import inspect
 import json
 import logging
+from logging.handlers import WatchedFileHandler
 import os
 import signal
 import threading
@@ -41,13 +42,14 @@ class Tourbillon(object):
         self._thr_run_event = threading.Event()
         self._loop = asyncio.get_event_loop()
         self._tasks = []
+        self._notifiers = {}
         self._pluginconfig = {}
 
         with open(config_file, 'r') as f:
             self._config = json.load(f)
 
         formatter = logging.Formatter(fmt=self._config['log_format'])
-        handler = logging.handlers.WatchedFileHandler(
+        handler = WatchedFileHandler(
             self._config['log_file'])
         handler.setFormatter(formatter)
         handler.setLevel(getattr(logging, self._config['log_level']))
@@ -56,6 +58,7 @@ class Tourbillon(object):
             getattr(logging, self._config['log_level']))
         logger.info('Use config file: %s', config_file)
 
+        self._configure_notifiers()
         self._load_plugins_config(os.path.abspath(
                                   os.path.dirname(config_file)))
 
@@ -240,6 +243,28 @@ class Tourbillon(object):
             )
         logger.debug('configured tasks: %s', self._tasks)
 
+    def _configure_notifiers(self):
+        if 'notifications' not in self._config:
+            return
+        notifications = self._config['notifications']
+        if 'notifiers' not in notifications:
+            return
+            # raise Exception
+        notifiers = notifications['notifiers']
+
+        for n in notifiers:
+            module_name, class_name = n['class'].rsplit('.', 1)
+            print(module_name, class_name)
+            NotifierClass = getattr(import_module(module_name), class_name)
+            self._notifiers[n['name']] = NotifierClass(**n['params'])
+        print(self._notifiers)
+
+    def _start_notifiers(self):
+        pass
+
+    def _stop_notifiers(self):
+        pass
+
     def stop(self):
         """stop the tourbillon agent"""
 
@@ -248,6 +273,7 @@ class Tourbillon(object):
         logger.info('shutting down tourbillon...')
         self._aio_run_event.clear()
         self._thr_run_event.clear()
+        self._stop_notifires()
 
     def run(self):
         """start the tourbillon agent"""
@@ -255,6 +281,7 @@ class Tourbillon(object):
         logger.info('starting tourbillon...')
         self._loop.add_signal_handler(signal.SIGINT, self.stop)
         self._loop.add_signal_handler(signal.SIGTERM, self.stop)
+        self._start_notifiers()
         self._load_tasks()
         self._aio_run_event.set()
         self._thr_run_event.set()
