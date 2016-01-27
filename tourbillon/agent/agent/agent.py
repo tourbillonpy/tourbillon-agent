@@ -60,8 +60,6 @@ class Tourbillon(object):
                                   os.path.dirname(config_file)))
 
         self._influxdb = InfluxDBClient(**self._config['database'])
-        self._databases = [i['name']
-                           for i in self._influxdb.get_list_database()]
 
     def _load_plugins_config(self, tourbillon_conf_dir):
         t = Template(self._config['plugins_conf_dir'])
@@ -107,10 +105,7 @@ class Tourbillon(object):
         """create syncronously a database and a retention policy
         in the InfluxDB instance"""
 
-        if name not in self._databases:
-            self._influxdb.create_database(name)
-            self._databases.append(name)
-            logger.info('database %s created successfully', name)
+        self._influxdb.create_database(name, if_not_exists=True)
 
         if duration and replication:
             rps = self._influxdb.get_list_retention_policies(name)
@@ -161,13 +156,10 @@ class Tourbillon(object):
         """create asyncronously a database and a retention policy
         in the InfluxDB instance"""
 
-        if name not in self._databases:
-            yield from self._loop.run_in_executor(
-                None,
-                self._influxdb.create_database,
-                name)
-            self._databases.append(name)
-            logger.info('database %s created successfully', name)
+        yield from self._loop.run_in_executor(
+            None,
+            functools.partial(self._influxdb.create_database,
+                              name, if_not_exists=True))
 
         if duration and replication:
             rps = yield from self._loop.run_in_executor(
