@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-from datetime import timedelta
 import functools
 import glob
 import inspect
@@ -8,13 +6,18 @@ import logging
 import os
 import signal
 import threading
+from datetime import timedelta
 from string import Template
 
-import trollius as asyncio
-from trollius import From
 from concurrent.futures import ThreadPoolExecutor
 from importlib import import_module
 from influxdb import InfluxDBClient
+
+try:
+    import asyncio
+except ImportError:
+    import trollius as asyncio
+
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +31,14 @@ def _to_hours(period):
     elif period[-1] == 'd':
         td = timedelta(days=int(period[:-1]))
         return '%dh0m0s' % int(td.total_seconds() / 3600)
+
+
+def _is_caller_coro():
+    cf = inspect.currentframe()
+    caller_name = cf.f_back.f_back.f_code.co_name
+    caller = cf.f_back.f_back.f_globals[caller_name]
+    return asyncio.iscoroutinefunction(caller) or \
+        asyncio.iscoroutine(caller)
 
 
 class Tourbillon(object):
@@ -55,16 +66,12 @@ class Tourbillon(object):
         logging.getLogger().addHandler(handler)
         logging.getLogger().setLevel(
             getattr(logging, self._config['log_level']))
-
         logger.info('Use config file: %s', config_file)
 
         self._load_plugins_config(os.path.abspath(
                                   os.path.dirname(config_file)))
 
         self._influxdb = InfluxDBClient(**self._config['database'])
-        self._databases = [i['name']
-                           for i in self._influxdb.get_list_database()]
-        print(self._databases)
 
     def _load_plugins_config(self, tourbillon_conf_dir):
         t = Template(self._config['plugins_conf_dir'])
@@ -81,39 +88,12 @@ class Tourbillon(object):
                 except:
                     logger.exception('error loading config file %s', file_name)
 
-    @property
-    def config(self):
-        """returns a dictionary that contains configuration for each enabled
-        plugin"""
-
-        return self._pluginconfig
-
-    @property
-    def run_event(self):
-        """get the asyncio.Event or threading.Event"""
-
-        cf = inspect.currentframe()
-        caller_name = cf.f_back.f_code.co_name
-        caller = cf.f_back.f_globals[caller_name]
-        if asyncio.iscoroutinefunction(caller) or asyncio.iscoroutine(caller):
-            return self._aio_run_event
-        else:
-            return self._thr_run_event
-
-    def push(self, points, database):
-        """write syncronously datapoints to InfluxDB"""
-
-        self._influxdb.write_points(points, database=database)
-
-    def create_database(self, name, duration=None, replication=None,
-                        default=True):
+    def _create_database(self, name, duration=None, replication=None,
+                         default=True):
         """create syncronously a database and a retention policy
         in the InfluxDB instance"""
 
-        if name not in self._databases:
-            self._influxdb.create_database(name)
-            self._databases.append(name)
-            logger.info('database %s created successfully', name)
+        self._influxdb.create_database(name, if_not_exists=True)
 
         if duration and replication:
             rps = self._influxdb.get_list_retention_policies(name)
@@ -146,74 +126,6 @@ class Tourbillon(object):
                 replication=replication,
                 default=default
             )
-            logger.info('retention policy %s created successfully',
-                        tourbillon_rp_name)
-
-    @asyncio.coroutine
-    def async_push(self, points, database):
-        """write asyncronously datapoints to InfluxDB"""
-
-        yield From(self._loop.run_in_executor(
-            None,
-            functools.partial(self._influxdb.write_points,
-                              points, database=database)))
-
-    @asyncio.coroutine
-    def async_create_database(self, name, duration=None, replication=None,
-                              default=True):
-        """create asyncronously a database and a retention policy
-        in the InfluxDB instance"""
-
-        if name not in self._databases:
-            yield From(self._loop.run_in_executor(
-                None,
-                self._influxdb.create_database,
-                name))
-            self._databases.append(name)
-            logger.info('database %s created successfully', name)
-
-        if duration and replication:
-            rps = yield From(self._loop.run_in_executor(
-                None,
-                self._influxdb.get_list_retention_policies,
-                name))
-            tourbillon_rp_name = '%s_tourbillon' % name
-            duration_in_hours = _to_hours(duration)
-            logger.debug('duration_in_hours: %s', duration_in_hours)
-            for rp in rps:
-                if rp['name'] == tourbillon_rp_name:
-                    logger.debug('current rp: %s', rp)
-                    if rp['duration'] == duration_in_hours and \
-                            rp['replicaN'] == int(replication) and \
-                            rp['default'] == default:
-                        logger.debug('the retention policy %s already exists',
-                                     tourbillon_rp_name)
-                        return
-                    yield From(self._loop.run_in_executor(
-                        None,
-                        functools.partial(
-                            self._influxdb.alter_retention_policy,
-                            tourbillon_rp_name,
-                            database=name,
-                            duration=duration,
-                            replication=replication,
-                            default=default
-                        )
-                    ))
-                    logger.info('retention policy %s altered successfully',
-                                tourbillon_rp_name)
-                    return
-            yield From(self._loop.run_in_executor(
-                None,
-                functools.partial(
-                    self._influxdb.create_retention_policy,
-                    tourbillon_rp_name,
-                    database=name,
-                    duration=duration,
-                    replication=replication,
-                    default=default
-                )
-            ))
             logger.info('retention policy %s created successfully',
                         tourbillon_rp_name)
 
@@ -250,6 +162,43 @@ class Tourbillon(object):
                 max_workers=thread_targets_count + 2)
             )
         logger.debug('configured tasks: %s', self._tasks)
+
+    @property
+    def config(self):
+        """returns a dictionary that contains configuration for each enabled
+        plugin"""
+
+        return self._pluginconfig
+
+    @property
+    def run_event(self):
+        """get the asyncio.Event or threading.Event"""
+
+        if _is_caller_coro():
+            return self._aio_run_event
+        else:
+            return self._thr_run_event
+
+    def push(self, points, database):
+        """write syncronously datapoints to InfluxDB"""
+        if _is_caller_coro():
+            return self._loop.run_in_executor(
+                None,
+                functools.partial(self._influxdb.write_points,
+                                  points, database=database))
+        self._influxdb.write_points(points, database=database)
+
+    def create_database(self, name, duration=None, replication=None,
+                        default=True):
+        if _is_caller_coro():
+            return self._loop.run_in_executor(
+                None,
+                functools.partial(self._create_database,
+                                  name, duration=duration,
+                                  replication=replication,
+                                  default=default))
+        self._create_database(name, duration=duration, replication=replication,
+                              default=default)
 
     def stop(self):
         """stop the tourbillon agent"""

@@ -343,7 +343,7 @@ def run(ctx):
     with open(pid_file, 'w') as f:
         f.write(str(os.getpid()))
     config_file = ctx.parent.params['config']
-    from tourbillon.agent import Tourbillon
+    from .tourbillon import Tourbillon
     ag = Tourbillon(config_file)
     ag.run()
 
