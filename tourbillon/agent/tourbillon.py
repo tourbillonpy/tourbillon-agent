@@ -182,10 +182,12 @@ class Tourbillon(object):
     def push(self, points, database):
         """write syncronously datapoints to InfluxDB"""
         if _is_caller_coro():
+            logger.debug('push points from coro')
             return self._loop.run_in_executor(
                 None,
                 functools.partial(self._influxdb.write_points,
                                   points, database=database))
+        logger.debug('push points from thread')
         self._influxdb.write_points(points, database=database)
 
     def create_database(self, name, duration=None, replication=None,
