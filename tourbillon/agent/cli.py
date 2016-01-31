@@ -1,18 +1,21 @@
 #!/usr/bin/env python
-from importlib import import_module
 import json
-import sys
 import os
-import pip
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib import urlopen
+import sys
 
 import click
+import pip
+import six
+from importlib import import_module
+from six.moves.urllib.request import urlopen
+# try:
+#     from urllib.request import urlopen
+# except ImportError:
+#     from urllib import urlopen
+from terminaltables import AsciiTable
 
-PY34_PLUS = sys.version_info[0] == 3 and sys.version_info[1] >= 4
-PY27 = sys.version_info[0] == 2 and sys.version_info[1] == 7
+# PY34_PLUS = sys.version_info[0] == 3 and sys.version_info[1] >= 4
+# PY27 = sys.version_info[0] == 2 and sys.version_info[1] == 7
 
 LOG_FORMAT_EX = '%(asctime)s %(levelname)s [%(name)s %(filename)s:'\
     '%(funcName)s:%(lineno)d] %(message)s'
@@ -24,13 +27,21 @@ INDEX_FILE_URL = 'https://raw.githubusercontent.com/tourbillon-python/'\
 
 
 def get_index():
-    data = urlopen(INDEX_FILE_URL).read()
-    if PY34_PLUS:
-        data = data.decode()
+    data = urlopen(INDEX_FILE_URL).read().decode()
 
-    index = {k: v for (k, v) in json.loads(data).items()
-             if PY34_PLUS and v['py3'] or PY27 and v['py2']}
-    return index
+    names = []
+    table = [['name', 'version', 'description', 'author', 'f']]
+    for name, meta in json.loads(data).items():
+        if six.PY3 and meta['py3'] or six.PY2 and meta['py2']:
+            names.append(name)
+            table.append([
+                name,
+                meta['version'],
+                meta['description'],
+                meta['author'],
+                '*' if meta['featured'] else ''
+            ])
+    return names, table
 
 
 @click.group()
@@ -121,31 +132,21 @@ def init(ctx):
 @click.option('--compact', default=False, is_flag=True)
 def list(ctx, compact):
     """list available tourbillon plugins"""
-    index = get_index()
+    names, table = get_index()
 
-    top = '+{:<20}+{:<5}+{:<60}+{:<35}+-+'.format('-' * 20,
-                                                  '-' * 5,
-                                                  '-' * 60,
-                                                  '-' * 35)
-    header = '|{:<20}|{:<5}|{:<60}|{:<35}|F|'.format('name',
-                                                     'ver.',
-                                                     'description',
-                                                     'author')
-    line = '|{:<20}|{:<5}|{:<60}|{:<35}|{}|'
-
-    if not compact:
-        print(top)
-        print(header)
-        print(top)
-
-    for name, meta in index.items():
-        if not compact:
-            print(line.format(name, meta['version'], meta['description'],
-                              meta['author'], '*' if meta['featured'] else ''))
-        else:
+    if compact:
+        for name in names:
             print(name)
-    if not compact:
-        print(top)
+    else:
+        at = AsciiTable(table)
+        at.justify_columns = {
+            0: 'left',
+            1: 'center',
+            2: 'left',
+            3: 'left',
+            4: 'center'
+        }
+        print(at.table)
 
 
 @cli.command()
@@ -350,11 +351,3 @@ def run(ctx):
 
 def main():
     cli(prog_name='tourbillon', standalone_mode=False)
-
-if __name__ == '__main__':
-    if __package__ is None:
-        path = os.path.dirname(os.path.dirname(os.path.dirname(
-                               os.path.abspath(__file__))))
-
-        sys.path.append(path)
-    main()

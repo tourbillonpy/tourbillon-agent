@@ -2,17 +2,20 @@ import sys
 
 from setuptools import find_packages, setup
 
-PY34_PLUS = sys.version_info[0] == 3 and sys.version_info[1] >= 4
+install_requires = [
+    'influxdb>=2.11.0',
+    'click>=5.1',
+    'terminaltables>=2.1.0',
+    'six>=1.10.0'
+]
 
-install_requires = ['influxdb>=2.11.0', 'click==5.1']
-
-if not PY34_PLUS:
-    install_requires.append('trollius==2.0')
+if sys.version_info < (3, 4, ):
+    install_requires.append('trollius>=2.0')
 
 
 setup(
     name='tourbillon',
-    version='0.7',
+    version='0.6',
     description='A Python agent for collecting metrics and store them into'
     ' an InfluxDB.',
     packages=find_packages(),
