@@ -4,9 +4,9 @@ About tourbillon
 What is tourbillon
 ==================
 
-tourbillon is an efficient, very simple and extensible agent that allows to collect metrics from servers or services and writes them into a InfluxDB.
+tourbillon is an efficient, very simple and extensible agent that allows to collect metrics from servers or services and to write them into an InfluxDB.
 
-It's is written in pure python.
+It is written in pure python.
 
 
 Supported platforms
