@@ -64,14 +64,14 @@ or for the 32 bit version: ::
 Using pip
 ---------
 
-To install tourbillon from PyPI at a command prompt types: ::
+To install tourbillon from PyPI at a command prompt type: ::
 	
 	$ pip install tourbillon
 
 
 .. note::
 	
-	It is strongly reccomended to install tourbillon in a virtualenv.
+	It is strongly recommended to install tourbillon in a virtualenv.
 
 
 
