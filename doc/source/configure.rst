@@ -52,6 +52,6 @@ The tourbillon configuration file looks like: ::
 * **log_format**: logfile format (see python logging)
 * **log_level**: log level (see python logging)
 * **plugins**: tourbillon plugins configuration section
-* **plugins_conf_dir**: directory where tourbillon search for the plugins configuration files.
+* **plugins_conf_dir**: directory where tourbillon searches for the plugin configuration files.
 
 
