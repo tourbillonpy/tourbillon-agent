@@ -55,6 +55,7 @@ def get_index():
               default='/var/run/tourbillon/tourbillon.pid',
               help='specify a different pidfile file',
               metavar='<pidfile_file>')
+
 def cli(config, pidfile):
     """tourbillon: send metrics to an influxdb"""
     pass
@@ -64,56 +65,84 @@ def cli(config, pidfile):
 @click.pass_context
 def init(ctx):
     """initialize the tourbillon configuration"""
-    config_file = ctx.parent.params['config']
-    click.echo(click.style('\nConfigure Tourbillon agent\n',
-                           fg='blue', bold=True, underline=True))
-    click.echo(click.style('InfluxDB configuration\n',
-                           fg='magenta', underline=True))
-    host = click.prompt('Enter the InfluxDB hostname', default='localhost')
-    port = click.prompt('Enter the InfluxDB port', default=8086, type=int)
-    username = click.prompt('Enter the InfluxDB username [Enter for no auth]',
-                            default='',
-                            show_default=False)
-    password = None
-    if username:
-        password = click.prompt('Enter the InfluxDB password',
-                                hide_input=True,
-                                confirmation_prompt=True)
+    try:
+        config_file = ctx.parent.params['config']
+        click.echo(click.style('\nConfigure Tourbillon agent\n',
+                               fg='blue', bold=True, underline=True))
 
-    click.echo(click.style('\nLogging configuration\n',
-                           fg='magenta', underline=True))
-    log_level = click.prompt('Enter the log level', type=click.Choice([
-                             'CRITICAL',
-                             'ERROR',
-                             'WARNING',
-                             'INFO',
-                             'DEBUG'
-                             ]), default='INFO')
-    log_format = click.prompt('Enter the log format', type=click.Choice([
-        'default',
-        'extended']), default='default')
+        click.echo(click.style('InfluxDB configuration\n',
+                               fg='magenta', underline=True))
 
-    log_file = click.prompt('Enter the log filename', default=LOG_FILENAME)
+        host = click.prompt('Enter the InfluxDB hostname', default='localhost')
 
-    fmt = LOG_FORMAT_NO if log_format == 'default' else LOG_FORMAT_EX
-    config = {
-        'database': {
-            'host': host,
-            'port': port
-        },
-        'log_format': fmt,
-        'log_level': log_level,
-        'log_file': log_file,
-        'plugins_conf_dir': '${tourbillon_conf_dir}/conf.d'
-    }
-    if username:
-        config['database']['username'] = username
-        config['database']['password'] = password
+        port = click.prompt('Enter the InfluxDB port', default=8086, type=int)
 
-    with open(config_file, 'w') as f:
-        json.dump(config, f, indent=4)
+        ssl = click.confirm('Enable SSL connection',
+                            default=False, show_default=True)
 
-    click.echo(click.style('\nconfiguration file generated\n', fg='green'))
+        verify_ssl = click.confirm('Enable SSL certificate verification',
+                                   default=False, show_default=True)
+
+        if verify_ssl and not ssl:
+            click.secho('\nYou can only activate ssl verification if SSL '
+                        'connection is enabled', fg='red')
+            click.secho('SSL certicate verification will not be enabled\n',
+                        fg='red')
+            verify_ssl = False
+
+        username = click.prompt(
+            'Enter the InfluxDB username [Enter for no auth]',
+            default='',
+            show_default=False)
+        password = None
+        if username:
+            password = click.prompt('Enter the InfluxDB password',
+                                    hide_input=True,
+                                    confirmation_prompt=True)
+
+        click.echo(click.style('\nLogging configuration\n',
+                               fg='magenta', underline=True))
+
+        log_level = click.prompt('Enter the log level', type=click.Choice([
+                                 'CRITICAL',
+                                 'ERROR',
+                                 'WARNING',
+                                 'INFO',
+                                 'DEBUG'
+                                 ]), default='INFO')
+        log_format = click.prompt('Enter the log format', type=click.Choice([
+            'default',
+            'extended']), default='default')
+
+        log_file = click.prompt('Enter the log filename', default=LOG_FILENAME)
+
+        fmt = LOG_FORMAT_NO if log_format == 'default' else LOG_FORMAT_EX
+        config = {
+            'database': {
+                'host': host,
+                'port': port,
+                'ssl': ssl,
+                'verify_ssl': verify_ssl
+            },
+            'log_format': fmt,
+            'log_level': log_level,
+            'log_file': log_file,
+            'plugins_conf_dir': '${tourbillon_conf_dir}/conf.d'
+        }
+        if username:
+            config['database']['username'] = username
+            config['database']['password'] = password
+
+        config_dir = os.path.dirname(config_file)
+        if not os.path.exists(config_dir):
+            os.mkdir(config_dir, mode=0o755)
+
+        with open(config_file, 'w') as f:
+            json.dump(config, f, indent=4, sort_keys=True)
+
+        click.echo(click.style('\nconfiguration file generated\n', fg='green'))
+    except click.exceptions.Abort:
+        click.echo(click.style('\nconfiguration canceled\n', fg='red'))
 
 
 @cli.command()
